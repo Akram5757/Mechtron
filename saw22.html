@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشروع المقشطة الأفقية | تيم Mechtron</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #008cb3;
+            --bg: #0a0e14;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --gold: #ffd700;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        
+        body { 
+            background-color: var(--bg); 
+            background-image: radial-gradient(circle at 50% 0%, #1a2635 0%, #0a0e14 100%);
+            color: #fff; 
+            padding: 20px 10px; 
+            line-height: 1.7; 
+            overflow-x: hidden; 
+        }
+
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; }
+
+        /* Header Styling */
+        .project-header {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 50px 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-top: 5px solid var(--primary);
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .project-header i { 
+            font-size: 60px; 
+            color: var(--primary); 
+            margin-bottom: 20px; 
+            filter: drop-shadow(0 0 10px var(--primary)); 
+        }
+
+        .project-header h1 { font-size: clamp(24px, 6vw, 36px); font-weight: 900; margin-bottom: 15px; }
+        .supervisor { font-size: 18px; color: var(--gold); }
+
+        /* Cards Styling */
+        .info-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Components Grid */
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .comp-item {
+            background: rgba(255,255,255,0.02);
+            padding: 18px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .comp-item i { background: rgba(0, 212, 255, 0.1); padding: 12px; border-radius: 12px; color: var(--primary); font-size: 20px; }
+        .comp-item b { display: block; color: var(--primary); margin-bottom: 4px; }
+
+        /* Laws Grid */
+        .laws-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .law-item {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            padding: 20px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .law-item::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; background: var(--primary); }
+        .law-formula { 
+            font-family: 'Consolas', monospace; 
+            color: var(--primary); 
+            font-size: 18px; 
+            font-weight: 700; 
+            background: #000; 
+            padding: 10px 15px; 
+            border-radius: 12px; 
+            direction: ltr; 
+        }
+
+        /* Project Gallery */
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .img-wrapper {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+        .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
+        .img-wrapper:hover img { transform: scale(1.1); }
+
+        /* Video Section - YouTube */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-radius: 24px;
+        }
+
+        /* Social Section (Behance) */
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            text-decoration: none;
+            color: #fff;
+            max-width: 300px;
+            transition: 0.3s;
+        }
+        .social-item:hover { transform: translateY(-3px); border-color: var(--primary); background: rgba(0, 212, 255, 0.05); }
+        .social-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 20px; background: rgba(255, 255, 255, 0.05); color: #1769ff; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed; z-index: 9999;
+            padding: 40px 20px;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            align-items: center; justify-content: center;
+        }
+        .modal-content { max-width: 90%; max-height: 85vh; border-radius: 15px; box-shadow: 0 0 50px rgba(0, 212, 255, 0.3); animation: zoomIn 0.3s; }
+        @keyframes zoomIn { from {transform:scale(0.8); opacity:0} to {transform:scale(1); opacity:1} }
+        .close-modal { position: absolute; top: 30px; left: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; }
+
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 10px; margin: 50px auto; padding: 15px 40px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: #000; text-decoration: none; border-radius: 50px; font-weight: 800; transition: 0.3s;
+        }
+
+        @media (max-width: 600px) { .laws-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="project-header">
+        <i class="fas fa-cog fa-spin"></i>
+        <h1>ماكيت محاكاة المقشطة الأفقية</h1>
+        <p class="supervisor">
+            إشراف الدكتور: الشافعي أحمد 
+            <br>
+            <small style="color: #fff; opacity: 0.7; font-weight: 400;">وكيل كلية التكنولوجيا والتعليم للدراسات العليا</small>
+        </p>
+    </header>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-layer-group"></i> المكونات الميكانيكية</h2>
+        <div class="components-grid">
+            <div class="comp-item"><i class="fas fa-gear"></i><span><b>ترس قائد</b>محرك الميكانزم الرئيسي.</span></div>
+            <div class="comp-item"><i class="fas fa-gears"></i><span><b>ترس منقاد</b>ناقل الحركة بمديول 10.</span></div>
+            <div class="comp-item"><i class="fas fa-link"></i><span><b>ذراع الكارنك</b>لتحويل الحركة الدورانية لترددية.</span></div>
+            <div class="comp-item"><i class="fas fa-arrows-left-right"></i><span><b>ذراع التمساح</b>المسؤول عن حركة القشط.</span></div>
+            <div class="comp-item"><i class="fas fa-box"></i><span><b>هيكل MDF</b>خامة التصنيع المقطوعة بالليزر.</span></div>
+            <div class="comp-item"><i class="fas fa-drafting-compass"></i><span><b>تصميم AutoCAD</b>رسم هندسي دقيق للأجزاء.</span></div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-square-root-variable"></i> الحسابات الهندسية (Gear Data)</h2>
+        <div class="laws-grid">
+            <div class="law-item"><div class="law-info"><b>دائرة الخطوة</b><small>Pitch Circle (D)</small></div><div class="law-formula">D = N × M</div></div>
+            <div class="law-item"><div class="law-info"><b>القطر الخارجي</b><small>Outside Dia (Do)</small></div><div class="law-formula">Do = (N+2)×M</div></div>
+            <div class="law-item"><div class="law-info"><b>القطر الداخلي</b><small>Root Dia (Df)</small></div><div class="law-formula">Df = (N-2.5)×M</div></div>
+            <div class="law-item"><div class="law-info"><b>الخطوة الدائرية</b><small>Circular Pitch (P)</small></div><div class="law-formula">P = π × M</div></div>
+            <div class="law-item"><div class="law-info"><b>سمك السنة</b><small>Tooth Thickness (T)</small></div><div class="law-formula">T = P ÷ 2</div></div>
+            <div class="law-item"><div class="law-info"><b>ارتفاع السنة</b><small>Whole Depth (H)</small></div><div class="law-formula">H = 2.25 × M</div></div>
+            <div class="law-item"><div class="law-info"><b>مركز الترسين</b><small>Center Dist (C)</small></div><div class="law-formula">C = (D1+D2)/2</div></div>
+            <div class="law-item"><div class="law-info"><b>نسبة السرعة</b><small>Speed Ratio (i)</small></div><div class="law-formula">i = N1 / N2</div></div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-camera-retro"></i> توثيق مراحل التنفيذ (اضغط للتكبير)</h2>
+        <div class="project-gallery">
+            <div class="img-wrapper"><img src="صورة1.jpg" alt="1" class="gallery-img"></div>
+            <div class="img-wrapper"><img src="صورة2.jpg" alt="2" class="gallery-img"></div>
+            <div class="img-wrapper"><img src="صورة3.jpg" alt="3" class="gallery-img"></div>
+            <div class="img-wrapper"><img src="صورة4.jpg" alt="4" class="gallery-img"></div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-clapperboard"></i> تجربة التشغيل والمناقشة</h2>
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/ضع_كود_الفيديو_هنا" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+  
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-right"></i> العودة للرئيسية
+        </a>
+    </div>
+</div>
+
+<div id="imgModal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="fullImg">
+</div>
+
+<script>
+    const modal = document.getElementById("imgModal");
+    const fullImg = document.getElementById("fullImg");
+    const closeBtn = document.querySelector(".close-modal");
+    const images = document.querySelectorAll(".gallery-img");
+
+    images.forEach(img => {
+        img.parentElement.onclick = () => {
+            modal.style.display = "flex";
+            fullImg.src = img.src;
+            document.body.style.overflow = "hidden";
+        }
+    });
+
+    closeBtn.onclick = () => { modal.style.display = "none"; document.body.style.overflow = "auto"; }
+    modal.onclick = (e) => { if(e.target === modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } }
+</script>
+
+</body>
+</html>
