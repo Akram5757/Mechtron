@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محمد عبد المحسن | فريق Mechtron</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --bg: #0a0e14;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg); color: #fff; padding: 15px; }
+
+        .container { width: 100%; max-width: 600px; margin: 0 auto; }
+
+        .profile-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--primary);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .profile-img {
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            margin-bottom: 15px;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        h1 { font-size: 24px; margin-bottom: 5px; }
+        .tagline { color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 15px; }
+
+        .bio-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 18px;
+            margin: 25px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .skill-item {
+            background: var(--glass);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .social-btn {
+            width: 45px; height: 45px;
+            border-radius: 12px;
+            background: var(--glass);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .social-btn:hover { background: var(--primary); color: #000; transform: translateY(-3px); }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin: 40px 0;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: #aaa;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="profile-card">
+        <img src="10.jpg" alt="محمد عبد المحسن" class="profile-img">
+        <h1>محمد عبد المحسن محمد</h1>
+        <p class="tagline">مسؤول العرض والتقديم | خبير الجانب العلمي الهندسي
+        ومصمم ميكانيكي</p>
+        
+        <div class="bio-section">
+            طالب بكلية التكنولوجيا والتعليم الصناعي، متخصص في ميكانيكا التشغيل. أمتلك خلفية علمية قوية تجمع بين الجانب الأكاديمي الهندسي والاهتمام بالفيزياء النووية. أؤمن أن الميكانيكا ليست مجرد مجال دراسي، بل هي "عين ثالثة" نرى من خلالها العالم بمنظور مختلف.
+        </div>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-microphone-alt"></i> دوري في تيم Mechtron</h2>
+    <div class="bio-section">
+        أتولى مسؤولية العرض والإلقاء، حيث أعمل على تبسيط المحتوى العلمي والميكانيكي المعقد وتقديمه بلغة فنية واقعية وسلسة. كان التحدي الأساسي بالنسبة لي هو إيصال "هوية المجال" للطلاب بشكل احترافي يسهل فهمه واستيعابه بسرعة، وهو ما أعتبره جوهر دوري كـ "جنرال" في التحدث باسم الفريق.
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-brain"></i> المهارات والخبرات</h2>
+    <div class="skills-grid">
+        <div class="skill-item"><i class="fas fa-bullhorn"></i> Public Speaking</div>
+        <div class="skill-item"><i class="fas fa-drafting-compass"></i> Mechanical Drawing</div>
+        <div class="skill-item"><i class="fas fa-atom"></i> Nuclear Physics</div>
+        <div class="skill-item"><i class="fas fa-tools"></i> Machining Expert</div>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-bullseye"></i> الطموح المهني</h2>
+    <div class="bio-section">
+        أسعى للتطور المستمر في مجال الهندسة الميكانيكية بجانبيها العلمي والعملي، وأن أصل لأقصى درجات الخبرة التي تمكنني من إنجاز مشاريع هندسية ضخمة تليق بمسيرتي العلمية وتترك بصمة حقيقية في هذا المجال.
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-address-book"></i> تواصل معي</h2>
+    <div class="social-links">
+        <a href="https://wa.me/201555972116" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:mohamed@example.com" class="social-btn"><i class="fas fa-envelope"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    
+    <footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.4;">جميع الحقوق محفوظة لفريق Mechtron © 2026
+    </footer>
+
+    <a href="index.html" class="back-link">← العودة للموقع الرئيسي/a>
+</div>
+
+</body>
+</html>
