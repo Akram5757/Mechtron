@@ -9,235 +9,192 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-  :root {
-    --primary: #00d4ff;
-    --bg: #0a0e14;
-    --glass: rgba(255, 255, 255, 0.05);
-    --border: rgba(255, 255, 255, 0.1);
-}
+        :root {
+            --primary: #00d4ff;
+            --bg: #0a0e14;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Cairo', sans-serif; 
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
 
-body { 
-    background-color: var(--bg); 
-    color: #fff; 
-    padding: 10px; 
-    overflow-x: hidden; 
-}
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            overflow-x: hidden; 
+        }
 
-.container { 
-    width: 100%; 
-    max-width: 900px; 
-    margin: 0 auto; 
-}
+        /* --- نظام الخلفية الحية (جديد) --- */
+        #hero-slideshow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            filter: brightness(0.3); /* تغميق الصور لبروز الكلام */
+        }
 
-/* الهيدر المطور */
-.main-header {
-    background: var(--glass);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 30px 15px;
-    margin-bottom: 25px;
-    border: 1px solid var(--border);
-    border-top: 4px solid var(--primary);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .slide {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
 
-/* تصحيح اللوجو لمنع بوظان الحواف */
-.team-logo-container {
-    width: 140px; 
-    height: 140px;
-    margin-bottom: 20px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .slide.active { opacity: 1; }
 
-.team-logo-inner {
-    width: 100%;
-    height: 100%;
-    background: #fff; /* خلفية بيضاء لتتناسب مع لوجو ميكترون */
-    border: 3px solid var(--primary);
-    border-radius: 20px; /* زوايا منحنية شيك */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+        .container { 
+            width: 100%; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px 10px;
+            position: relative;
+            z-index: 1;
+        }
 
-.team-logo-inner img {
-    width: 85%; /* مساحة أمان داخل البرواز */
-    height: auto;
-    object-fit: contain;
-}
+        /* الهيدر المطور */
+        .main-header {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px 15px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--primary);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.team-logo-container:hover .team-logo-inner {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
-}
+        .team-logo-container {
+            width: 130px; height: 130px;
+            margin-bottom: 20px;
+        }
 
-.team-name-big { 
-    font-size: 38px; 
-    font-weight: 900; 
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    text-shadow: 0 0 15px var(--primary);
-    margin: 10px 0;
-}
+        .team-logo-inner {
+            width: 100%; height: 100%;
+            background: #fff;
+            border: 3px solid var(--primary);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
 
-/* معرض الصور */
-.section-title {
-    margin: 25px 0 15px;
-    padding-right: 12px;
-    border-right: 4px solid var(--primary);
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .team-logo-inner img { width: 85%; height: auto; object-fit: contain; }
 
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-}
+        .team-name-big { 
+            font-size: clamp(30px, 8vw, 40px); 
+            font-weight: 900; 
+            letter-spacing: 4px;
+            text-shadow: 0 0 15px var(--primary);
+            margin: 10px 0;
+        }
 
-.gallery-box {
-    background: var(--glass);
-    border-radius: 15px;
-    height: 160px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        /* معرض الصور */
+        .section-title {
+            margin: 25px 0 15px;
+            padding-right: 12px;
+            border-right: 4px solid var(--primary);
+            font-size: 20px;
+            display: flex; align-items: center; gap: 10px;
+        }
 
-.gallery-box img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-}
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
 
-.gallery-box:hover { 
-    border-color: var(--primary); 
-    transform: translateY(-3px); 
-}
+        .gallery-box {
+            background: var(--glass);
+            border-radius: 15px;
+            height: 160px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-/* المشاريع وفريق العمل */
-.projects-grid { 
-    display: grid; 
-    grid-template-columns: 1fr; 
-    gap: 12px; 
-}
+        .gallery-box img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-box:hover { border-color: var(--primary); transform: translateY(-5px); }
 
-.p-card { 
-    background: var(--glass); 
-    border-radius: 15px; 
-    padding: 20px; 
-    text-decoration: none; 
-    color: white; 
-    border-right: 5px solid var(--primary);
-    display: flex; 
-    align-items: center; 
-    gap: 15px;
-    transition: 0.3s;
-}
+        /* المشاريع وفريق العمل */
+        .projects-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .p-card { 
+            background: var(--glass); 
+            backdrop-filter: blur(5px);
+            border-radius: 15px; 
+            padding: 20px; 
+            text-decoration: none; color: white; 
+            border-right: 5px solid var(--primary);
+            display: flex; align-items: center; gap: 15px;
+            transition: 0.3s;
+        }
+        .p-card:hover { background: rgba(255,255,255,0.1); transform: translateX(-5px); }
 
-.p-card:hover { background: rgba(255,255,255,0.08); transform: scale(1.02); }
+        .team-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .member { 
+            background: var(--glass); 
+            backdrop-filter: blur(5px);
+            border-radius: 15px; 
+            padding: 15px; 
+            display: flex; align-items: center; gap: 15px; 
+            border: 1px solid var(--border);
+            text-decoration: none; color: inherit;
+            transition: 0.3s;
+        }
+        .member:hover { border-color: var(--primary); background: rgba(0, 212, 255, 0.05); }
+        .member img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
-.team-grid { 
-    display: grid; 
-    grid-template-columns: 1fr; 
-    gap: 10px; 
-}
+        /* نظام الـ Lightbox المكبر */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            justify-content: center; align-items: center;
+        }
 
-.member { 
-    background: rgba(255,255,255,0.03); 
-    border-radius: 15px; 
-    padding: 15px; 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    border: 1px solid var(--border);
-    text-decoration: none; 
-    color: inherit;
-    transition: 0.3s;
-}
+        .modal-content {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            animation: zoomIn 0.3s ease;
+        }
 
-.member:hover { 
-    border-color: var(--primary); 
-    background: rgba(0, 212, 255, 0.05); 
-}
+        @keyframes zoomIn { from {transform: scale(0.7); opacity:0} to {transform: scale(1); opacity:1} }
 
-.member img { 
-    width: 65px; 
-    height: 65px; 
-    border-radius: 50%; 
-    border: 2px solid var(--primary); 
-    object-fit: cover;
-}
+        .close-btn { position: absolute; top: 25px; left: 25px; color: white; font-size: 40px; cursor: pointer; }
 
-.m-info h4 { font-size: 16px; margin-bottom: 2px; }
-.m-info p { font-size: 12px; opacity: 0.7; }
-.m-info i { color: var(--primary); margin-left: 5px; }
-
-/* نظام الـ Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 2000;
-    left: 0; top: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(8px);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    max-width: 90%;
-    max-height: 80%;
-    border-radius: 15px;
-    border: 2px solid var(--primary);
-}
-
-.close-btn {
-    position: absolute;
-    top: 25px; left: 25px;
-    color: white; font-size: 40px; cursor: pointer;
-}
-
-/* الاستجابة للشاشات الكبيرة */
-@media (min-width: 768px) {
-    .gallery { grid-template-columns: repeat(4, 1fr); }
-    .projects-grid { grid-template-columns: repeat(3, 1fr); }
-    .team-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
+        @media (min-width: 768px) {
+            .gallery { grid-template-columns: repeat(4, 1fr); }
+            .projects-grid { grid-template-columns: repeat(3, 1fr); }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">  <header class="main-header" style="padding: 20px 10px;">
+<div id="hero-slideshow">
+    <div class="slide active" style="background-image: url('صورة1.jpg');"></div>
+    <div class="slide" style="background-image: url('صورة2.jpg');"></div>
+    <div class="slide" style="background-image: url('صورة3.jpg');"></div>
+    <div class="slide" style="background-image: url('صورة4.jpg');"></div>
+</div>
+
+<div class="container">
+    <header class="main-header">
         <div class="team-logo-container">
-            <div class="team-logo-inner">
-                <img src="لوجو.jpg" alt="Mechtron Logo">
-            </div>
+            <div class="team-logo-inner"><img src="لوجو.jpg" alt="Mechtron Logo"></div>
         </div>
-        
         <div class="header-text">
-            <h1 style="font-size: 14px; opacity: 0.6; letter-spacing: 1px;">جامعة السويس</h1>
+            <h1 style="font-size: 14px; opacity: 0.6;">جامعة السويس</h1>
             <h2 style="font-size: 18px; font-weight: 600;">كلية التكنولوجيا والتعليم</h2>
             <div class="team-name-big">MECHTRON</div>
             <p style="margin-top: 5px; font-size: 12px; color: var(--primary); font-weight: 800;">
@@ -246,87 +203,54 @@ body {
         </div>
     </header>
 
-   
-
-    <h2 class="section-title"><i class="fas fa-images"></i> معرض الصور</h2>
-    <div class="gallery">        <div class="gallery-box" onclick="openModal('صورة1.jpg')"><img src="صورة1.jpg" alt="1"></div>
+    <h2 class="section-title"><i class="fas fa-images"></i> معرض الصور (اضغط للتكبير)</h2>
+    <div class="gallery">
+        <div class="gallery-box" onclick="openModal('صورة1.jpg')"><img src="صورة1.jpg" alt="1"></div>
         <div class="gallery-box" onclick="openModal('صورة2.jpg')"><img src="صورة2.jpg" alt="2"></div>
         <div class="gallery-box" onclick="openModal('صورة3.jpg')"><img src="صورة3.jpg" alt="3"></div>
         <div class="gallery-box" onclick="openModal('صورة4.jpg')"><img src="صورة4.jpg" alt="4"></div>
     </div>
 
-
-    <h2 class="section-title"><i class="fas fa-project-diagram"></i> مشاريع الفريق </h2>
+    <h2 class="section-title"><i class="fas fa-project-diagram"></i> مشاريع الفريق</h2>
     <div class="projects-grid">
-        <a href="saw22.html" class="p-card"><i class="fas fa-cog fa-2x"></i> <div><h4>ماكينة المقشطة الافقية </h4><small>اضغط للتفاصيل</small></div></a>
+        <a href="saw22.html" class="p-card"><i class="fas fa-cog fa-2x"></i> <div><h4>ماكينة المقشطة الافقية</h4><small>اضغط للتفاصيل</small></div></a>
         <a href="cylinder.html" class="p-card"><i class="fas fa-drafting-compass fa-2x"></i> <div><h4>الأسطوانة المقطوعة</h4><small>إفراد زاوية 30°</small></div></a>
         <a href="bolts.html" class="p-card"><i class="fas fa-box fa-2x"></i> <div><h4>لوحة المسامير</h4><small>تجميع الوصلات</small></div></a>
     </div>
+
     <h2 class="section-title"><i class="fas fa-users"></i> فريق Mechtron</h2>
     <div class="team-grid">
-        
         <a href="بورت اكرم.html" class="member">
             <img src="22.jpg" alt="أكرم محمد">
-            <div class="m-info">
-                <h4>أكرم محمد <i class="fas fa-crown" style="color: #ffd700; font-size: 14px;"></i></h4>
-                <p><i class="fas fa-drafting-compass"></i> مصمم هندسي (القائد)</p>
-            </div>
+            <div class="m-info"><h4>أكرم محمد <i class="fas fa-crown" style="color: #ffd700;"></i></h4><p>مصمم هندسي (القائد)</p></div>
         </a>
-
         <a href="بورت شهاب.html" class="member">
             <img src="20.jpg" alt="شهاب محمد">
-            <div class="m-info">
-                <h4>شهاب محمد</h4>
-                <p><i class="fas fa-palette"></i> مصمم هوية وأخصائي تشغيل</p>
-            </div>
+            <div class="m-info"><h4>شهاب محمد</h4><p>مصمم هوية وأخصائي تشغيل</p></div>
         </a>
-
         <a href="محمد عبد المحسن.html" class="member">
             <img src="10.jpg" alt="محمد عبد المحسن">
-            <div class="m-info">
-                <h4>محمد عبد المحسن</h4>
-                <p><i class="fas fa-microphone-alt"></i> مسؤول العرض والتقديم
-                ومصمم ميكانيكي</p>
-            </div>
+            <div class="m-info"><h4>محمد عبد المحسن</h4><p>مسؤول العرض والتقديم</p></div>
         </a>
-
         <a href="بورت ايمان .html" class="member">
             <img src="ايمان1.jpg" alt="إيمان أشرف">
-            <div class="m-info">
-                <h4>إيمان أشرف</h4>
-                <p><i class="fas fa-users-cog"></i> مسؤولة التنظيم العام</p>
-            </div>
+            <div class="m-info"><h4>إيمان أشرف</h4><p>مسؤولة التنظيم العام</p></div>
         </a>
-
         <a href="بورت شروق.html" class="member">
             <img src="شروق.jpg" alt="شروق عاصم">
-            <div class="m-info">
-                <h4>شروق عاصم</h4>
-                <p><i class="fas fa-tools"></i> منسقة عرض ومساعد فني</p>
-            </div>
+            <div class="m-info"><h4>شروق عاصم</h4><p>منسقة عرض ومساعد فني</p></div>
         </a>
         <a href="بورت حسن .html" class="member">
             <img src="حسن.jpg" alt="حسن أشرف">
-            <div class="m-info">
-                <h4>حسن أشرف</h4>
-                <p><i class="fas fa-handshake"></i> مسؤول المشتريات والمنسق العام</p>
-            </div>
+            <div class="m-info"><h4>حسن أشرف</h4><p>مسؤول المشتريات والمنسق</p></div>
         </a>
-
         <a href="عبدالرحمن.html" class="member">
             <img src="عبده.jpg" alt="عبد الرحمن يحيى">
-            <div class="m-info">
-                <h4>عبد الرحمن يحيى</h4>
-                <p><i class="fas fa-industry"></i> مسؤول تشغيل CNC وتجميع</p>
-            </div>
+            <div class="m-info"><h4>عبد الرحمن يحيى</h4><p>مسؤول تشغيل CNC</p></div>
         </a>
+    </div>
 
-            </div>
-        </a>
-        </div>
-
-    <footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.4;"> جميع الحقوق محفوظة لصالح فريق Mechtron©
-    </footer>
+    <footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.6;">جميع الحقوق محفوظة لفريق Mechtron © 2026</footer>
 </div>
 
 <div id="imageModal" class="modal" onclick="closeModal()">
@@ -335,18 +259,25 @@ body {
 </div>
 
 <script>
+    // تغيير الخلفية تلقائياً
+    let slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+    setInterval(nextSlide, 5000); // كل 5 ثواني
+
+    // وظائف التكبير
     function openModal(imgSrc) {
         const modal = document.getElementById("imageModal");
         const fullImg = document.getElementById("fullImg");
         modal.style.display = "flex";
         fullImg.src = imgSrc;
-        setTimeout(() => { modal.classList.add("active"); }, 10);
     }
-
     function closeModal() {
-        const modal = document.getElementById("imageModal");
-        modal.classList.remove("active");
-        setTimeout(() => { modal.style.display = "none"; }, 300);
+        document.getElementById("imageModal").style.display = "none";
     }
 </script>
 
