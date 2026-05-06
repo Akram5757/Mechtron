@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بسملة عبد القادر | فريق Mechtron</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #bb86fc; 
+            --accent: #ff79c6; 
+            --bg: #0a0e14;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg); color: #fff; padding: 15px; }
+
+        .container { width: 100%; max-width: 600px; margin: 0 auto; }
+
+        .profile-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--primary);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .profile-img {
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            margin-bottom: 15px;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(187, 134, 252, 0.2);
+        }
+
+        h1 { font-size: 24px; margin-bottom: 5px; }
+        .tagline { color: var(--primary); font-weight: bold; font-size: 14px; margin-bottom: 15px; }
+
+        .bio-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 18px;
+            margin: 25px 0 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .skill-item {
+            background: var(--glass);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-btn {
+            width: 45px; height: 45px;
+            border-radius: 12px;
+            background: var(--glass);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 20px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .social-btn:hover {
+            background: var(--primary);
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(187, 134, 252, 0.4);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin: 40px 0;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="profile-card">
+        <img src="بسملة1.jpeg" alt="بسملة عبد القادر" class="profile-img">
+        <h1>بسملة عبد القادر</h1>
+        <p class="tagline">عضو فريق Mechtron | منسقة العرض ومحلل تقني</p>
+        
+        <div class="bio-section">
+            أنا بسملة عبد القادر، طالبة بكلية التكنولوجيا والتعليم بجامعة السويس. أؤمن أن نجاح أي عمل هندسي يعتمد على الوضوح في العرض والقدرة على تحليل نقاط القوة والتحديات، وهذا ما أسعى لتقديمه مع زملائي في تيم Mechtron.
+        </div>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-tasks"></i> دوري في تيم Mechtron</h2>
+    <div class="bio-section">
+        كان لي دور أساسي في <b>تنسيق وإخراج العرض التقديمي (Presentation)</b> ليظهر بشكل منظم واحترافي. وخلال المناقشة، توليت مسؤولية تحليل وشرح <b>مميزات وعيوب الميكانزم</b>، مع توضيح الحلول المقترحة للتطوير، مما ساعد في إبراز الجانب التحليلي لمشروعنا أمام لجنة المناقشة.
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-magic"></i> المهارات</h2>
+    <div class="skills-grid">
+        <div class="skill-item"><i class="fas fa-search-plus"></i> SWOT Analysis</div>
+        <div class="skill-item"><i class="fas fa-desktop"></i> Slide Design</div>
+        <div class="skill-item"><i class="fas fa-check-circle"></i> Features Review</div>
+        <div class="skill-item"><i class="fas fa-users"></i> Collaboration</div>
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-quote-right"></i> كلمة للفريق</h2>
+    <div class="bio-section" style="text-align: center;">
+        " ليس المهم مدى سرعة ركضنا كأفراد، المهم هو ألا نترك أحداً خلفنا ونحن نتجه نحو القمة. عظمة الفريق تظهر في اللحظات الصعبة، لا في لحظات الاحتفال فقط."
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-share-alt"></i> روابط التواصل</h2>
+    <div class="social-links">
+        <a href="https://wa.me/2010 11455078" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="mailto:baaa17@ind.suezuni.edu.eg" class="social-btn"><i class="fas fa-envelope"></i></a>
+    </div>
+
+    <footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.4;">جميع الحقوق محفوظة لفريق Mechtron © 2026
+    </footer>
+    <a href="index.html" class="back-link">← العودة للموقع الرئيسي</a>
+</div>
+
+</body>
+</html>
