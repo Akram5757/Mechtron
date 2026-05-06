@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشروع إفراد أسطوانة | قسم ميكانيكا إنتاج</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #00ffaa; /* لون أخضر ميكانيكي */
+            --bg: #0a0e14;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --gold: #ffd700;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+        }
+
+        #slideshow-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            filter: brightness(0.15) blur(3px);
+        }
+
+        .bg-slide {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .bg-slide.active { opacity: 1; }
+
+        .container { 
+            width: 100%; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            padding: 15px;
+            position: relative; 
+            z-index: 1; 
+        }
+
+        .project-header {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-top: 5px solid var(--primary);
+            margin-bottom: 25px;
+        }
+
+        .project-header i { font-size: clamp(40px, 10vw, 60px); color: var(--primary); margin-bottom: 15px; }
+        .project-header h1 { font-size: clamp(20px, 5vw, 32px); font-weight: 900; }
+        .supervisor { font-size: clamp(14px, 4vw, 18px); color: var(--gold); margin-top: 10px; }
+
+        .info-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: clamp(15px, 3vw, 30px);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            color: var(--primary);
+            font-size: clamp(18px, 4vw, 22px);
+            margin-bottom: 20px;
+            display: flex; align-items: center; gap: 10px;
+            border-right: 4px solid var(--primary);
+            padding-right: 10px;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .comp-item {
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            display: flex; gap: 15px;
+            transition: 0.3s;
+        }
+        .comp-item:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .comp-item i { color: var(--primary); font-size: 20px; background: rgba(0, 255, 170, 0.1); padding: 10px; border-radius: 10px; height: fit-content; }
+        .comp-item b { display: block; color: var(--primary); margin-bottom: 2px; }
+
+        .laws-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+        }
+
+        .law-item {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .law-info b { font-size: 14px; display: block; }
+        .law-info small { opacity: 0.6; font-size: 11px; }
+
+        .law-formula {
+            background: #000;
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            font-weight: bold;
+            font-size: clamp(13px, 3vw, 16px);
+            direction: ltr;
+            border: 1px solid var(--primary);
+        }
+
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .img-wrapper {
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+        .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .img-wrapper:hover img { transform: scale(1.1); }
+
+        /* تنسيق قسم الفيديو الجديد */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* نسبة العرض للارتفاع 16:9 */
+            height: 0; 
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .video-container iframe { 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+        }
+
+        .back-btn {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; width: fit-content; margin: 30px auto;
+            padding: 15px 40px; background: var(--primary);
+            color: #000; text-decoration: none; border-radius: 50px;
+            font-weight: 900; transition: 0.3s;
+        }
+        .back-btn:hover { box-shadow: 0 0 25px var(--primary); transform: scale(1.05); }
+
+        @media (min-width: 768px) {
+            .project-gallery { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .modal {
+            display: none; position: fixed; z-index: 2000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
+            justify-content: center; align-items: center;
+        }
+        .modal-content { max-width: 90%; max-height: 80%; border: 2px solid var(--primary); border-radius: 15px; }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 40px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="slideshow-bg">
+    <div class="bg-slide active" style="background-image: url('https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&w=1000');"></div>
+    <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1000');"></div>
+</div>
+
+<div class="container">
+    <header class="project-header">
+        <i class="fas fa-tools"></i>
+        <h1>إفراد أسطوانة بزاوية قطع 30 درجة</h1>
+        <p class="supervisor">تحت إشراف الدكتور: حسام حمدان</p>
+        <p>أستاذ مساعد بقسم ميكانيكا الإنتاج</p>
+    </header>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-list-check"></i> مواصفات المشروع</h2>
+        <div class="components-grid">
+            <div class="comp-item"><i class="fas fa-ruler-combined"></i><span><b>الأبعاد</b>ارتفاع 50 سم | قطر 20 سم.</span></div>
+            <div class="comp-item"><i class="fas fa-layer-group"></i><span><b>نوع المعدن</b>صاج بسمك 0.5 مم.</span></div>
+            <div class="comp-item"><i class="fas fa-industry"></i><span><b>طريقة التشكيل</b>استخدام ماكينة الدرفلة.</span></div>
+            <div class="comp-item"><i class="fas fa-scissors"></i><span><b>أدوات القطع</b>مقص يدوي / آلي صاج.</span></div>
+            <div class="comp-item"><i class="fas fa-compass"></i><span><b>الشنكرة</b>أدوات رسم هندسي دقيق.</span></div>
+            <div class="comp-item"><i class="fas fa-vector-square"></i><span><b>زاوية القطع</b>ميل بمقدار 30 درجة.</span></div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-calculator"></i> الحسابات الهندسية للإفراد</h2>
+        <div class="laws-grid">
+            <div class="law-item"><div class="law-info"><b>طول الإفراد (المحيط)</b><small>Circumference (L)</small></div><div class="law-formula">L = π × D</div></div>
+            <div class="law-item"><div class="law-info"><b>أقصى ارتفاع</b><small>Max Height (H1)</small></div><div class="law-formula">H1 = H + (r × tanθ)</div></div>
+            <div class="law-item"><div class="law-info"><b>أقل ارتفاع</b><small>Min Height (H2)</small></div><div class="law-formula">H2 = H - (r × tanθ)</div></div>
+            <div class="law-item"><div class="law-info"><b>المسافة بين الرواسم</b><small>Division Space</small></div><div class="law-formula">S = L / 12</div></div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-images"></i> مراحل التنفيذ العملي</h2>
+        <div class="project-gallery">
+            <div class="img-wrapper" onclick="openFull('img1.jpg')"><img src="https://via.placeholder.com/400x300/111/00ffaa?text=Drawing"></div>
+            <div class="img-wrapper" onclick="openFull('img2.jpg')"><img src="https://via.placeholder.com/400x300/111/00ffaa?text=Cutting"></div>
+            <div class="img-wrapper" onclick="openFull('img3.jpg')"><img src="https://via.placeholder.com/400x300/111/00ffaa?text=Rolling"></div>
+            <div class="img-wrapper" onclick="openFull('img4.jpg')"><img src="https://via.placeholder.com/400x300/111/00ffaa?text=Final+Product"></div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-play-circle"></i> فيديو الشرح ومراحل التنفيذ</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/ضع_كود_الفيديو_هنا" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-btn"><i class="fas fa-house"></i> العودة للصفحة الرئيسية</a>
+</div>
+
+<div id="modal" class="modal" onclick="closeFull()">
+    <span class="close-modal">&times;</span>
+    <img id="fullImg" class="modal-content">
+</div>
+
+<script>
+    let bgSlides = document.querySelectorAll('.bg-slide');
+    let currentIdx = 0;
+    setInterval(() => {
+        bgSlides[currentIdx].classList.remove('active');
+        currentIdx = (currentIdx + 1) % bgSlides.length;
+        bgSlides[currentIdx].classList.add('active');
+    }, 5000);
+
+    function openFull(src) {
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('fullImg').src = src;
+        document.body.style.overflow = 'hidden';
+    }
+    function closeFull() {
+        document.getElementById('modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+</script>
+
+</body>
+</html>

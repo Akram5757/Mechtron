@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تجميع وعرض المسامير | تيم Mechtron</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ff6b00; /* لون برتقالي ميكانيكي */
+            --primary-glow: rgba(255, 107, 0, 0.6);
+            --bg: #0b0c10;
+            --glass: rgba(20, 24, 33, 0.7);
+            --border: rgba(255, 107, 0, 0.15);
+            --gold: #ffd700;
+            --gradient: linear-gradient(135deg, #ff6b00, #ff9e00);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            line-height: 1.6; 
+            overflow-x: hidden; 
+        }
+
+        /* نظام الخلفية المتغيرة */
+        #slideshow-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            filter: brightness(0.18) blur(6px);
+        }
+
+        .bg-slide {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .bg-slide.active { opacity: 1; }
+
+        .container { 
+            width: 100%; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            padding: 20px 15px;
+            position: relative; 
+            z-index: 1; 
+        }
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* الهيدر */
+        .project-header {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-top: 5px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            animation: slideUpFade 0.8s ease-out forwards;
+        }
+
+        .project-header i { 
+            font-size: clamp(45px, 10vw, 70px); 
+            color: var(--primary); 
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+        .project-header h1 { 
+            font-size: clamp(24px, 5vw, 36px); 
+            font-weight: 900; 
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .supervisor { 
+            font-size: clamp(16px, 4vw, 20px); 
+            color: var(--gold); 
+            margin-top: 15px; 
+            font-weight: 700;
+        }
+
+        /* الكروت */
+        .info-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: clamp(20px, 4vw, 35px);
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: slideUpFade 0.8s ease-out forwards;
+        }
+
+        .info-card:nth-child(2) { animation-delay: 0.2s; }
+        .info-card:nth-child(3) { animation-delay: 0.4s; }
+        .info-card:nth-child(4) { animation-delay: 0.6s; }
+        .info-card:nth-child(5) { animation-delay: 0.8s; }
+
+        .section-title {
+            color: var(--primary);
+            font-size: clamp(20px, 4vw, 24px);
+            margin-bottom: 25px;
+            display: flex; align-items: center; gap: 12px;
+            border-right: 5px solid var(--primary);
+            padding-right: 15px;
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+        }
+
+        /* مواصفات اللوحة الخشبية */
+        .board-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            display: flex; gap: 15px;
+            align-items: center;
+            transition: all 0.4s ease;
+        }
+        .spec-item:hover { 
+            border-color: var(--primary); 
+            transform: translateY(-5px); 
+            box-shadow: 0 5px 20px var(--primary-glow);
+            background: rgba(255, 107, 0, 0.05);
+        }
+        .spec-item i { 
+            color: var(--primary); 
+            font-size: 24px; 
+            background: rgba(255, 107, 0, 0.1); 
+            padding: 15px; 
+            border-radius: 12px; 
+        }
+        .spec-item b { display: block; color: var(--primary); font-size: 18px; margin-bottom: 5px; }
+        .spec-item span { font-size: 14px; color: #ccc; }
+
+        /* شبكة المسامير */
+        .screw-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .screw-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .screw-card:hover {
+            border-color: var(--primary);
+            background: rgba(0,0,0,0.6);
+        }
+        .screw-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--gradient);
+        }
+        .screw-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .screw-card-header h3 {
+            color: #fff;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .screw-card-header h3 i { color: var(--primary); }
+        .screw-badge {
+            background: var(--primary);
+            color: #fff;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .screw-details { font-size: 14px; color: #ccc; }
+        .screw-details p { margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .screw-details p span { color: var(--primary); font-weight: bold; }
+
+        /* معرض الصور */
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .img-wrapper {
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            position: relative;
+        }
+        .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .img-wrapper:hover img { transform: scale(1.1); filter: brightness(0.6); }
+
+        /* مشغل الفيديو */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0; border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        .back-btn {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; width: fit-content; margin: 40px auto;
+            padding: 15px 40px; 
+            background: var(--gradient);
+            color: #fff; text-decoration: none; border-radius: 50px;
+            font-weight: 900; font-size: 18px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: slideUpFade 0.8s ease-out 1s forwards;
+        }
+        .back-btn:hover { box-shadow: 0 0 25px var(--primary-glow); transform: scale(1.05); }
+
+        @media (min-width: 768px) {
+            .project-gallery { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        /* نافذة التكبير */
+        .modal {
+            display: none; position: fixed; z-index: 2000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px);
+            justify-content: center; align-items: center;
+        }
+        .modal-content { max-width: 90%; max-height: 85vh; border: 2px solid var(--primary); border-radius: 15px; }
+        .close-modal { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 45px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="slideshow-bg">
+    <div class="bg-slide active" style="background-image: url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200');"></div>
+    <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=1200');"></div>
+    <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=1200');"></div>
+</div>
+
+<div class="container">
+    <header class="project-header">
+        <i class="fas fa-tools"></i>
+        <h1>لوحة تجميع وعرض أنواع ومقاسات المسامير</h1>
+        <p class="supervisor">إشراف الدكتور: حسام حمدان</p>
+        <p style="color: #aaa; font-size: 14px; margin-top: 5px;">أستاذ مساعد بقسم تكنولوجيا الإنتاج</p>
+    </header>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-layer-group"></i> مواصفات اللوحة وبطاقة البيانات</h2>
+        <div class="board-specs">
+            <div class="spec-item">
+                <i class="fas fa-expand-arrows-alt"></i>
+                <div><b>أبعاد اللوحة</b><span>65 سم (طول) × 45 سم (عرض).</span></div>
+            </div>
+            <div class="spec-item">
+                <i class="fas fa-tree"></i>
+                <div><b>خامة القاعدة</b><span>لوح خشبي من الخشب الكونتر 6مم لتثبيت المسامير.</span></div>
+            </div>
+            <div class="spec-item">
+                <i class="fas fa-id-card"></i>
+                <div><b>نظام التعريف</b><span>بطاقات بيانات مخصصة لكل نوع مسمار لتوضيح التفاصيل التقنية.</span></div>
+            </div>
+            <div class="spec-item">
+                <i class="fas fa-bullseye"></i>
+                <div><b>الغرض من المشروع</b><span>تسهيل عملية التمييز بين أنواع القلاووظ والمقاسات القياسية.</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-list-ol"></i> أنواع المسامير والبيانات الفنية المعروضة</h2>
+        <div class="screw-grid">
+            
+            <div class="screw-card">
+                <div class="screw-card-header">
+                    <h3><i class="fas fa-nut-bolt"></i> مسمار سداسي (Hex Bolt)</h3>
+                    <span class="screw-badge">Standard</span>
+                </div>
+                <div class="screw-details">
+                    <p>نوع السن: <span>متري خشن (Metric)</span></p>
+                    <p>المقاسات: <span>M6, M8, M10, M12</span></p>
+                    <p>الخامة: <span>صلب كربوني (Grade 8.8)</span></p>
+                    <p>طريقة الربط: <span>مفتاح ربط سداسي</span></p>
+                </div>
+            </div>
+
+            <div class="screw-card">
+                <div class="screw-card-header">
+                    <h3><i class="fas fa-braille"></i> مسمار ألن (Allen Screw)</h3>
+                    <span class="screw-badge">High Strength</span>
+                </div>
+                <div class="screw-details">
+                    <p>نوع الرأس: <span>رأس مسدس داخلي</span></p>
+                    <p>المقاسات: <span>M5, M6, M8</span></p>
+                    <p>الخامة: <span>صلب سبائكي</span></p>
+                    <p>طريقة الربط: <span>مفتاح ألن</span></p>
+                </div>
+            </div>
+
+            <div class="screw-card">
+                <div class="screw-card-header">
+                    <h3><i class="fas fa-hashtag"></i> سن صاج (Self-Tapping)</h3>
+                    <span class="screw-badge">Direct Fix</span>
+                </div>
+                <div class="screw-details">
+                    <p>نوع السن: <span>سن مدبب حاد</span></p>
+                    <p>المقاسات: <span>بوصة (Inches)</span></p>
+                    <p>الخامة: <span>حديد مجلفن</span></p>
+                    <p>طريقة الربط: <span>مفك صليبة / عادة</span></p>
+                </div>
+            </div>
+
+            <div class="screw-card">
+                <div class="screw-card-header">
+                    <h3><i class="fas fa-arrows-left-right"></i> مسمار غفيرة (Stud Bolt)</h3>
+                    <span class="screw-badge">Headless</span>
+                </div>
+                <div class="screw-details">
+                    <p>نوع السن: <span>مقلووظ من الطرفين</span></p>
+                    <p>المقاسات: <span>M10, M14</span></p>
+                    <p>الاستخدام: <span>المحركات وأغطية الضغط</span></p>
+                    <p>طريقة التثبيت: <span>صواميل مقابلة</span></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-images"></i> توثيق خطوات تنفيذ وتنسيق اللوحة</h2>
+        <div class="project-gallery">
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=400" alt="تجهيز اللوح"></div>
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=400" alt="تثبيت المسامير"></div>
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400" alt="بطاقات البيانات"></div>
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400" alt="الشكل النهائي"></div>
+        </div>
+    </div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-play-circle"></i> فيديو شرح اللوحة وعرض المكونات</h2>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/your_video_id" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+</div>
+
+<div id="modal" class="modal" onclick="closeFull()">
+    <span class="close-modal">&times;</span>
+    <img id="fullImg" class="modal-content">
+</div>
+
+<script>
+    // نظام تغيير الخلفية التلقائي
+    let bgSlides = document.querySelectorAll('.bg-slide');
+    let currentIdx = 0;
+    setInterval(() => {
+        bgSlides[currentIdx].classList.remove('active');
+        currentIdx = (currentIdx + 1) % bgSlides.length;
+        bgSlides[currentIdx].classList.add('active');
+    }, 5000);
+
+    // وظائف تكبير الصور
+    function openFull(src) {
+        let modal = document.getElementById('modal');
+        let fullImg = document.getElementById('fullImg');
+        modal.style.display = 'flex';
+        fullImg.src = src;
+        document.body.style.overflow = 'hidden';
+    }
+    function closeFull() {
+        document.getElementById('modal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+</script>
+
+</body>
+</html>
