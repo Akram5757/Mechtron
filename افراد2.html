@@ -10,7 +10,7 @@
 
     <style>
         :root {
-            --primary: #00ffaa; /* لون أخضر ميكانيكي */
+            --primary: #00ffaa; /* اللون الأخضر الميكانيكي */
             --bg: #0a0e14;
             --glass: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
@@ -26,6 +26,7 @@
             overflow-x: hidden; 
         }
 
+        /* نظام الخلفية المتغيرة */
         #slideshow-bg {
             position: fixed;
             top: 0; left: 0;
@@ -137,6 +138,7 @@
             border: 1px solid var(--primary);
         }
 
+        /* المعرض - التعديل هنا لظهور الصور */
         .project-gallery {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -153,20 +155,15 @@
         .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .img-wrapper:hover img { transform: scale(1.1); }
 
-        /* تنسيق قسم الفيديو الجديد */
         .video-container {
             position: relative;
-            padding-bottom: 56.25%; /* نسبة العرض للارتفاع 16:9 */
+            padding-bottom: 56.25%;
             height: 0; 
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid var(--border);
         }
-        .video-container iframe { 
-            position: absolute; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
         .back-btn {
             display: flex; align-items: center; justify-content: center;
@@ -194,8 +191,10 @@
 <body>
 
 <div id="slideshow-bg">
-    <div class="bg-slide active" style="background-image: url('https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&w=1000');"></div>
-    <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1000');"></div>
+    <div class="bg-slide active" style="background-image: url('صورة1.jpg');"></div>
+    <div class="bg-slide" style="background-image: url('صورة2.jpg');"></div>
+    <div class="bg-slide" style="background-image: url('صورة3.jpg');"></div>
+    <div class="bg-slide" style="background-image: url('صورة4.jpg');"></div>
 </div>
 
 <div class="container">
@@ -230,12 +229,12 @@
 
     <div class="info-card">
         <h2 class="section-title"><i class="fas fa-images"></i> مراحل التنفيذ العملي</h2>
-  <div id="slideshow-bg">
-    <div class="bg-slide active" style="background-image: url('صورة1.jpg');"></div>
-    <div class="bg-slide" style="background-image: url('صورة2.jpg');"></div>
-    <div class="bg-slide" style="background-image: url('صورة3.jpg');"></div>
-    <div class="bg-slide" style="background-image: url('صورة4.jpg');"></div>
-</div>
+        <div class="project-gallery">
+            <div class="img-wrapper" onclick="openFull('day1.jpeg')"><img src="day1.jpeg"></div>
+            <div class="img-wrapper" onclick="openFull('day2.jpeg')"><img src="day2.jpeg"></div>
+            <div class="img-wrapper" onclick="openFull('day3.jpeg')"><img src="day3.jpeg"></div>
+            <div class="img-wrapper" onclick="openFull('day4.jpeg')"><img src="day4.jpeg"></div>
+        </div>
     </div>
 
     <div class="info-card">
@@ -253,11 +252,10 @@
     <img id="fullImg" class="modal-content">
 </div>
 
-    <footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.6;">جميع الحقوق محفوظة لفريق Mechtron © 2026</footer>
-</div>
-
+<footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.6;">جميع الحقوق محفوظة لفريق Mechtron © 2026</footer>
 
 <script>
+    // تغيير الخلفية
     let bgSlides = document.querySelectorAll('.bg-slide');
     let currentIdx = 0;
     setInterval(() => {
@@ -266,6 +264,7 @@
         bgSlides[currentIdx].classList.add('active');
     }, 5000);
 
+    // وظائف التكبير
     function openFull(src) {
         document.getElementById('modal').style.display = 'flex';
         document.getElementById('fullImg').src = src;
