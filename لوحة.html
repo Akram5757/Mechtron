@@ -10,7 +10,7 @@
 
     <style>
         :root {
-            --primary: #ff6b00; /* لون برتقالي ميكانيكي */
+            --primary: #ff6b00; 
             --primary-glow: rgba(255, 107, 0, 0.6);
             --bg: #0b0c10;
             --glass: rgba(20, 24, 33, 0.7);
@@ -28,7 +28,6 @@
             overflow-x: hidden; 
         }
 
-        /* نظام الخلفية المتغيرة */
         #slideshow-bg {
             position: fixed;
             top: 0; left: 0;
@@ -62,7 +61,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* الهيدر */
         .project-header {
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -97,7 +95,6 @@
             font-weight: 700;
         }
 
-        /* الكروت */
         .info-card {
             background: var(--glass);
             backdrop-filter: blur(15px);
@@ -111,11 +108,6 @@
             animation: slideUpFade 0.8s ease-out forwards;
         }
 
-        .info-card:nth-child(2) { animation-delay: 0.2s; }
-        .info-card:nth-child(3) { animation-delay: 0.4s; }
-        .info-card:nth-child(4) { animation-delay: 0.6s; }
-        .info-card:nth-child(5) { animation-delay: 0.8s; }
-
         .section-title {
             color: var(--primary);
             font-size: clamp(20px, 4vw, 24px);
@@ -123,10 +115,8 @@
             display: flex; align-items: center; gap: 12px;
             border-right: 5px solid var(--primary);
             padding-right: 15px;
-            text-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
         }
 
-        /* مواصفات اللوحة الخشبية */
         .board-specs {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -140,25 +130,11 @@
             border: 1px solid var(--border);
             display: flex; gap: 15px;
             align-items: center;
-            transition: all 0.4s ease;
         }
-        .spec-item:hover { 
-            border-color: var(--primary); 
-            transform: translateY(-5px); 
-            box-shadow: 0 5px 20px var(--primary-glow);
-            background: rgba(255, 107, 0, 0.05);
-        }
-        .spec-item i { 
-            color: var(--primary); 
-            font-size: 24px; 
-            background: rgba(255, 107, 0, 0.1); 
-            padding: 15px; 
-            border-radius: 12px; 
-        }
-        .spec-item b { display: block; color: var(--primary); font-size: 18px; margin-bottom: 5px; }
-        .spec-item span { font-size: 14px; color: #ccc; }
 
-        /* شبكة المسامير */
+        .spec-item i { color: var(--primary); font-size: 24px; }
+        .spec-item b { display: block; color: var(--primary); font-size: 18px; margin-bottom: 5px; }
+
         .screw-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -170,13 +146,8 @@
             border-radius: 15px;
             border: 1px solid var(--border);
             padding: 20px;
-            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-        }
-        .screw-card:hover {
-            border-color: var(--primary);
-            background: rgba(0,0,0,0.6);
         }
         .screw-card::before {
             content: '';
@@ -192,27 +163,16 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
         }
-        .screw-card-header h3 {
-            color: #fff;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .screw-card-header h3 i { color: var(--primary); }
         .screw-badge {
             background: var(--primary);
             color: #fff;
             font-size: 12px;
             padding: 3px 10px;
             border-radius: 20px;
-            font-weight: bold;
         }
-        .screw-details { font-size: 14px; color: #ccc; }
-        .screw-details p { margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .screw-details p { margin-bottom: 8px; display: flex; justify-content: space-between; font-size: 14px; }
         .screw-details p span { color: var(--primary); font-weight: bold; }
 
-        /* معرض الصور */
         .project-gallery {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -225,19 +185,16 @@
             aspect-ratio: 4/3;
             border: 2px solid var(--border);
             cursor: pointer;
-            position: relative;
         }
         .img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .img-wrapper:hover img { transform: scale(1.1); filter: brightness(0.6); }
+        .img-wrapper:hover img { transform: scale(1.1); }
 
-        /* مشغل الفيديو */
         .video-container {
             position: relative;
             padding-bottom: 56.25%;
-            height: 0; border-radius: 20px;
+            height: 0; border-radius: 15px;
             overflow: hidden;
             border: 2px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 
@@ -247,26 +204,18 @@
             padding: 15px 40px; 
             background: var(--gradient);
             color: #fff; text-decoration: none; border-radius: 50px;
-            font-weight: 900; font-size: 18px;
-            transition: all 0.4s ease;
-            opacity: 0;
-            animation: slideUpFade 0.8s ease-out 1s forwards;
-        }
-        .back-btn:hover { box-shadow: 0 0 25px var(--primary-glow); transform: scale(1.05); }
-
-        @media (min-width: 768px) {
-            .project-gallery { grid-template-columns: repeat(4, 1fr); }
+            font-weight: 900;
         }
 
-        /* نافذة التكبير */
         .modal {
             display: none; position: fixed; z-index: 2000;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px);
-            justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.95); justify-content: center; align-items: center;
         }
         .modal-content { max-width: 90%; max-height: 85vh; border: 2px solid var(--primary); border-radius: 15px; }
         .close-modal { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 45px; cursor: pointer; }
+
+        @media (min-width: 768px) { .project-gallery { grid-template-columns: repeat(4, 1fr); } }
     </style>
 </head>
 <body>
@@ -274,7 +223,6 @@
 <div id="slideshow-bg">
     <div class="bg-slide active" style="background-image: url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200');"></div>
     <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=1200');"></div>
-    <div class="bg-slide" style="background-image: url('https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=1200');"></div>
 </div>
 
 <div class="container">
@@ -294,139 +242,120 @@
             </div>
             <div class="spec-item">
                 <i class="fas fa-tree"></i>
-                <div><b>خامة القاعدة</b><span>لوح خشبي من الخشب الكونتر 6مم لتثبيت المسامير.</span></div>
+                <div><b>خامة القاعدة</b><span>لوح خشبي من الخشب الكونتر 6مم.</span></div>
             </div>
             <div class="spec-item">
                 <i class="fas fa-id-card"></i>
-                <div><b>نظام التعريف</b><span>بطاقات بيانات مخصصة لكل نوع مسمار لتوضيح التفاصيل التقنية.</span></div>
-            </div>
-            <div class="spec-item">
-                <i class="fas fa-bullseye"></i>
-                <div><b>الغرض من المشروع</b><span>تسهيل عملية التمييز بين أنواع القلاووظ والمقاسات القياسية.</span></div>
+                <div><b>نظام التعريف</b><span>بطاقات بيانات تقنية لكل مسمار.</span></div>
             </div>
         </div>
     </div>
 
     <div class="info-card">
-        <h2 class="section-title"><i class="fas fa-list-ol"></i> أنواع المسامير والبيانات الفنية المعروضة</h2>
+        <h2 class="section-title"><i class="fas fa-list-ol"></i> البيانات التقنية الكاملة</h2>
         <div class="screw-grid">
-            
+            <!-- 1. المسامير المسدسة -->
             <div class="screw-card">
                 <div class="screw-card-header">
-                    <h3><i class="fas fa-nut-bolt"></i> مسمار سداسي (Hex Bolt)</h3>
-                    <span class="screw-badge">Standard</span>
-                </div>
-                <div class="screw-details">
-                    <p>نوع السن: <span>متري خشن (Metric)</span></p>
-                    <p>المقاسات: <span>M6, M8, M10, M12</span></p>
-                    <p>الخامة: <span>صلب كربوني (Grade 8.8)</span></p>
-                    <p>طريقة الربط: <span>مفتاح ربط سداسي</span></p>
-                </div>
-            </div>
-
-         <!-- 1. مجموعة المسامير المسدسة -->
-            <div class="screw-card">
-                <div class="screw-card-header">
-                    <h3><i class="fas fa-toolbox"></i> مجموعة المسامير المسدسة</h3>
+                    <h3>المسامير المسدسة</h3>
                     <span class="screw-badge">Hex Bolts</span>
                 </div>
                 <div class="screw-details">
-                    <p>المقاسات المتاحة: <span>10×80، 10×100، 16×80، 16×100</span></p>
+                    <p>المقاسات: <span>10×80، 10×100، 16×80، 16×100</span></p>
                     <p>خطوة السن: <span>1.75 مم</span></p>
-                    <p>أقطار المسامير: <span>10 مم، 16 مم</span></p>
-                    <p>مقاسات المفتاح: <span>17 مم، 24 مم</span></p>
+                    <p>الأقطار: <span>10 مم، 16 مم</span></p>
+                    <p>المفتاح المطلوب: <span>17 مم، 24 مم</span></p>
                 </div>
             </div>
 
-            <!-- 2. مسامير التليفون (الفيشر) -->
+            <!-- 2. مسامير التليفون -->
             <div class="screw-card">
                 <div class="screw-card-header">
-                    <h3><i class="fas fa-anchor"></i> مسمار تليفون (فيشر)</h3>
+                    <h3>مسمار تليفون (فيشر)</h3>
                     <span class="screw-badge">Anchor Bolts</span>
                 </div>
                 <div class="screw-details">
-                    <p>المقاسات المتاحة: <span>8×80، 8×100</span></p>
+                    <p>المقاسات: <span>8×80، 8×100</span></p>
                     <p>القطر: <span>8 مم</span></p>
-                    <p>الأطوال: <span>80 مم، 100 مم</span></p>
-                    <p>مقاس المفتاح: <span>13 مم</span></p>
+                    <p>المفتاح المطلوب: <span>13 مم</span></p>
                 </div>
             </div>
 
             <!-- 3. مسامير جويت -->
             <div class="screw-card">
                 <div class="screw-card-header">
-                    <h3><i class="fas fa-arrows-alt-v"></i> مسمار جويت</h3>
+                    <h3>مسمار جويت</h3>
                     <span class="screw-badge">Stud Bolts</span>
                 </div>
                 <div class="screw-details">
-                    <p>المقاسات المتاحة: <span>9×8×50، 10×12×50</span></p>
+                    <p>المقاسات: <span>9×8×50، 10×12×50</span></p>
                     <p>خطوة السن: <span>1.75 مم</span></p>
-                    <p>الطول: <span>50 مم</span></p>
-                    <p>مقاسات المفتاح: <span>(13+14)، (17+19)</span></p>
+                    <p>المفتاح: <span>(13+14)، (17+19)</span></p>
                 </div>
             </div>
 
-            <!-- 4. مسامير البوردة والفريزة -->
+            <!-- 4. الصواميل -->
             <div class="screw-card">
                 <div class="screw-card-header">
-                    <h3><i class="fas fa-screwdriver"></i> مسامير بوردة وفريزة</h3>
-                    <span class="screw-badge">Specialty Screws</span>
+                    <h3>تشكيلة الصواميل</h3>
+                    <span class="screw-badge">Nuts</span>
                 </div>
                 <div class="screw-details">
-                    <p>الأنواع: <span>بوردة، ألن فريزة، صليبة فريزة</span></p>
-                    <p>المقاسات: <span>10×50، 8×50</span></p>
-                    <p>خطوة السن: <span>1.75 مم</span></p>
-                    <p>طريقة الربط: <span>مفتاح 16، مفتاح ألن 8، مفك صليبة</span></p>
+                    <p>مسدسة: <span>16مم (م24)، 18مم (م27)</span></p>
+                    <p>بوردة: <span>8مم (م13)، 10مم (م16)</span></p>
+                    <p>عصفورة: <span>8+6 مم</span></p>
+                    <p>كوباية: <span>8 مم نيكل</span></p>
                 </div>
             </div>
 
-            <!-- 5. تشكيلة الصواميل -->
+            <!-- 5. الورد -->
             <div class="screw-card">
                 <div class="screw-card-header">
-                    <h3><i class="fas fa-dharmachakra"></i> تشكيلة الصواميل</h3>
-                    <span class="screw-badge">Nuts Types</span>
-                </div>
-                <div class="screw-details">
-                    <p>صامولة مسدسة: <span>16مم (مفتاح 24)، 18مم (مفتاح 27)</span></p>
-                    <p>صامولة بوردة: <span>8مم (مفتاح 13)، 10مم (مفتاح 16)</span></p>
-                    <p>صامولة عصفورة: <span>8+6 مم (مفتاح 13+10)</span></p>
-                    <p>صامولة كوباية نيكل: <span>8 مم (مفتاح 13)</span></p>
-                </div>
-            </div>
-
-            <!-- 6. تشكيلة الورد -->
-            <div class="screw-card">
-                <div class="screw-card-header">
-                    <h3><i class="fas fa-circle-notch"></i> تشكيلة الورد (Washers)</h3>
+                    <h3>تشكيلة الورد</h3>
                     <span class="screw-badge">Washers</span>
                 </div>
                 <div class="screw-details">
-                    <p>وردة طبق/عادية: <span>8مم، 10مم، 12مم</span></p>
-                    <p>وردة مسلوبة: <span>12مم (مفتاح 19)، 20مم (مفتاح 30)</span></p>
-                    <p>وردة سوستة: <span>8+10+12 مم (مفاتيح 13+17+19)</span></p>
-                    <p>أقطار الورد: <span>من 9 مم إلى 22 مم</span></p>
+                    <p>عادية: <span>8مم، 10مم، 12مم</span></p>
+                    <p>مسلوبة: <span>12مم (م19)، 20مم (م30)</span></p>
+                    <p>سوستة: <span>8+10+12 مم</span></p>
+                </div>
+            </div>
+
+            <!-- 6. مسامير بوردة وفريزة -->
+            <div class="screw-card">
+                <div class="screw-card-header">
+                    <h3>بوردة وفريزة</h3>
+                    <span class="screw-badge">Specialty</span>
+                </div>
+                <div class="screw-details">
+                    <p>ألن فريزة: <span>10×50 (مفتاح 8)</span></p>
+                    <p>صليبة فريزة: <span>8×50</span></p>
+                    <p>خطوة السن: <span>1.75 مم</span></p>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="info-card">
-        <h2 class="section-title"><i class="fas fa-images"></i> توثيق خطوات تنفيذ وتنسيق اللوحة</h2>
+        <h2 class="section-title"><i class="fas fa-images"></i> معرض مراحل التنفيذ</h2>
         <div class="project-gallery">
-            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=400" alt="تجهيز اللوح"></div>
-            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=400" alt="تثبيت المسامير"></div>
-            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400" alt="بطاقات البيانات"></div>
-            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400" alt="الشكل النهائي"></div>
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=400"></div>
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1534224039826-c7a0eda0e6b3?auto=format&fit=crop&w=400"></div>
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400"></div>
+            <div class="img-wrapper" onclick="openFull('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800')"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400"></div>
         </div>
     </div>
-<div class="video-container">
-    <iframe 
-        src="https://youtu.be/4sJVrkOg2E0?si=50nsuo8rSXGK930q" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-</div>
+
+    <div class="info-card">
+        <h2 class="section-title"><i class="fas fa-play-circle"></i> فيديو عرض المشروع</h2>
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/4sJVrkOg2E0?rel=0" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
     </div>
 
     <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
@@ -437,12 +366,7 @@
     <img id="fullImg" class="modal-content">
 </div>
 
-    <footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.6;">جميع الحقوق محفوظة لفريق Mechtron © 2026</footer>
-</div>
-
-
 <script>
-    // نظام تغيير الخلفية التلقائي
     let bgSlides = document.querySelectorAll('.bg-slide');
     let currentIdx = 0;
     setInterval(() => {
@@ -451,12 +375,9 @@
         bgSlides[currentIdx].classList.add('active');
     }, 5000);
 
-    // وظائف تكبير الصور
     function openFull(src) {
-        let modal = document.getElementById('modal');
-        let fullImg = document.getElementById('fullImg');
-        modal.style.display = 'flex';
-        fullImg.src = src;
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('fullImg').src = src;
         document.body.style.overflow = 'hidden';
     }
     function closeFull() {
