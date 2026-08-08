@@ -3,288 +3,1424 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تيم Mechtron | جامعة السويس</title>
-    
+    <title>Mechtron Team | جامعة السويس</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #00d4ff;
-            --bg: #0a0e14;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
+            --primary: #0066cc;
+            --primary-light: #e6f2ff;
+            --accent: #7c3aed;
+            --accent2: #06b6d4;
+            --gold: #f59e0b;
+            --bg: #f8fafc;
+            --bg-elevated: #ffffff;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --border: rgba(0, 102, 204, 0.12);
+            --border-hover: rgba(0, 102, 204, 0.3);
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --radius: 16px;
+            --radius-lg: 24px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-hover: 0 8px 30px rgba(0, 102, 204, 0.12), 0 2px 8px rgba(0,0,0,0.06);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        html { scroll-behavior: smooth; }
 
-        body { 
-            background-color: var(--bg); 
-            color: #fff; 
-            overflow-x: hidden; 
+        body {
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
         }
 
-        /* --- نظام الخلفية الحية (جديد) --- */
-        #hero-slideshow {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -2;
-            filter: brightness(0.3); /* تغميق الصور لبروز الكلام */
+        ::selection { background: rgba(0, 102, 204, 0.2); color: var(--text); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--primary), var(--accent)); border-radius: 10px; }
+
+        /* ===== Animated Background ===== */
+        #mesh-canvas {
+            position: fixed; inset: 0; z-index: -1;
+            opacity: 0.4;
         }
 
-        .slide {
-            position: absolute;
-            width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out;
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 0 24px;
+            height: 72px;
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(248, 250, 252, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.4s ease;
         }
 
-        .slide.active { opacity: 1; }
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+        }
 
-        .container { 
-            width: 100%; 
-            max-width: 900px; 
-            margin: 0 auto; 
-            padding: 20px 10px;
+        .nav-brand {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none; color: inherit;
+        }
+
+        .nav-brand img {
+            width: 42px; height: 42px; border-radius: 10px;
+            object-fit: cover; border: 1.5px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .nav-brand:hover img { border-color: var(--primary); box-shadow: 0 0 15px rgba(0,102,204,0.15); }
+
+        .nav-brand span {
+            font-weight: 800; font-size: 18px;
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex; align-items: center; gap: 6px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none; color: var(--text-secondary);
+            font-size: 14px; font-weight: 600;
+            padding: 8px 16px; border-radius: 10px;
+            transition: all 0.3s; position: relative;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-links a.active::after {
+            content: ''; position: absolute; bottom: 2px; left: 50%;
+            transform: translateX(-50%);
+            width: 16px; height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .nav-actions { display: flex; align-items: center; gap: 12px; }
+        .nav-toggle {
+            display: none; background: none; border: none;
+            color: var(--text); font-size: 22px; cursor: pointer;
+        }
+
+        /* ===== Social Icons in Navbar ===== */
+        .social-nav {
+            display: flex; align-items: center; gap: 8px;
+            margin-right: 8px; padding-right: 12px;
+            border-right: 1px solid var(--border);
+        }
+
+        .social-nav a {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 16px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .social-nav a:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 120px 24px 80px;
             position: relative;
-            z-index: 1;
         }
 
-        /* الهيدر المطور */
-        .main-header {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 30px 15px;
-            margin-bottom: 25px;
+        .hero-content { max-width: 700px; }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-top: 4px solid var(--primary);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 10px 24px; border-radius: 50px;
+            font-size: 13px; color: var(--primary);
+            margin-bottom: 32px; backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out;
+            box-shadow: var(--shadow);
         }
 
-        .team-logo-container {
-            width: 130px; height: 130px;
-            margin-bottom: 20px;
+        .hero-badge i { font-size: 12px; }
+
+        .hero-logo-wrap {
+            width: 160px; height: 160px;
+            margin: 0 auto 35px;
+            position: relative;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
         }
 
-        .team-logo-inner {
-            width: 100%; height: 100%;
-            background: #fff;
-            border: 3px solid var(--primary);
-            border-radius: 20px;
+        .hero-logo-wrap::before {
+            content: ''; position: absolute; inset: -8px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--accent2));
+            opacity: 0.25; filter: blur(20px);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .hero-logo-inner {
+            position: relative; width: 100%; height: 100%;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 24px;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            box-shadow: var(--shadow);
         }
 
-        .team-logo-inner img { width: 85%; height: auto; object-fit: contain; }
+        .hero-logo-inner img { width: 75%; object-fit: contain; }
 
-        .team-name-big { 
-            font-size: clamp(30px, 8vw, 40px); 
-            font-weight: 900; 
-            letter-spacing: 4px;
-            text-shadow: 0 0 15px var(--primary);
-            margin: 10px 0;
+        .hero h1 {
+            font-size: clamp(42px, 10vw, 72px);
+            font-weight: 900; letter-spacing: 6px; line-height: 1;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
         }
 
-        /* معرض الصور */
+        .hero-sub {
+            font-size: 17px; color: var(--text-secondary);
+            margin-bottom: 8px;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .hero-dept {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 15px; color: var(--primary);
+            font-weight: 700;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-stats {
+            display: flex; justify-content: center; gap: 40px;
+            margin-top: 50px;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+
+        .stat-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        .stat-item h3 {
+            font-size: 32px; font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .stat-item p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+        /* ===== Social Buttons in Hero ===== */
+        .social-hero {
+            display: flex; justify-content: center; gap: 16px;
+            margin-top: 40px;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .social-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-size: 15px; font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .social-btn i { font-size: 18px; }
+
+        .social-btn.tiktok {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        .social-btn.tiktok:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        }
+
+        .social-btn.youtube {
+            background: #ff0000;
+            color: #fff;
+            border-color: #ff0000;
+        }
+
+        .social-btn.youtube:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 12px 30px rgba(255,0,0,0.25);
+        }
+
+        .scroll-indicator {
+            position: absolute; bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            color: var(--text-muted); font-size: 12px;
+            animation: bounce 2s infinite; cursor: pointer;
+        }
+
+        section { padding: 100px 0; position: relative; }
+        .container { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+        .section-header {
+            text-align: center; margin-bottom: 60px;
+        }
+
+        .section-label {
+            display: inline-block; font-size: 12px;
+            color: var(--primary); font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
         .section-title {
-            margin: 25px 0 15px;
-            padding-right: 12px;
-            border-right: 4px solid var(--primary);
-            font-size: 20px;
-            display: flex; align-items: center; gap: 10px;
+            font-size: clamp(26px, 5vw, 38px);
+            font-weight: 900; color: var(--text); margin-bottom: 12px;
         }
 
-        .gallery {
+        .section-desc {
+            color: var(--text-secondary); font-size: 16px;
+            max-width: 520px; margin: 0 auto;
+        }
+
+        .gallery-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 16px;
         }
 
-        .gallery-box {
-            background: var(--glass);
-            border-radius: 15px;
-            height: 160px;
+        .gallery-item {
+            position: relative; border-radius: var(--radius-lg);
+            overflow: hidden; cursor: pointer;
+            aspect-ratio: 4/3;
             border: 1px solid var(--border);
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow);
+            background: var(--surface);
         }
 
-        .gallery-box img { width: 100%; height: 100%; object-fit: cover; }
-        .gallery-box:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .gallery-item:first-child { grid-column: span 2; grid-row: span 2; }
 
-        /* المشاريع وفريق العمل */
-        .projects-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-        .p-card { 
-            background: var(--glass); 
-            backdrop-filter: blur(5px);
-            border-radius: 15px; 
-            padding: 20px; 
-            text-decoration: none; color: white; 
-            border-right: 5px solid var(--primary);
-            display: flex; align-items: center; gap: 15px;
-            transition: 0.3s;
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.7s ease;
         }
-        .p-card:hover { background: rgba(255,255,255,0.1); transform: translateX(-5px); }
 
-        .team-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .member { 
-            background: var(--glass); 
-            backdrop-filter: blur(5px);
-            border-radius: 15px; 
-            padding: 15px; 
-            display: flex; align-items: center; gap: 15px; 
+        .gallery-item .gallery-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+            opacity: 0; transition: opacity 0.4s;
+            display: flex; align-items: flex-end; padding: 20px;
+        }
+
+        .gallery-item .gallery-overlay span {
+            color: #fff; font-size: 14px; font-weight: 600;
+            transform: translateY(10px); transition: transform 0.4s;
+        }
+
+        .gallery-item .zoom-btn {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.6);
+            width: 56px; height: 56px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            color: var(--primary); font-size: 20px; z-index: 2;
+            opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .gallery-item:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+        }
+
+        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-item:hover .gallery-overlay span { transform: translateY(0); }
+        .gallery-item:hover .zoom-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        .projects-grid {
+            display: grid; grid-template-columns: 1fr; gap: 20px;
+        }
+
+        .project-card {
+            background: var(--surface);
             border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 36px 32px;
             text-decoration: none; color: inherit;
-            transition: 0.3s;
+            display: flex; align-items: flex-start; gap: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+            box-shadow: var(--shadow);
         }
-        .member:hover { border-color: var(--primary); background: rgba(0, 212, 255, 0.05); }
-        .member img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
-        /* نظام الـ Lightbox المكبر */
+        .project-card::before {
+            content: ''; position: absolute; top: 0; right: 0;
+            width: 4px; height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            transition: width 0.4s ease, opacity 0.4s;
+        }
+
+        .project-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .project-card:hover::before { width: 100%; opacity: 0.03; }
+
+        .project-icon {
+            width: 64px; height: 64px; min-width: 64px;
+            background: linear-gradient(135deg, var(--primary-light), rgba(124,58,237,0.08));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 26px;
+            transition: all 0.4s;
+        }
+
+        .project-card:hover .project-icon {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff; border-color: transparent;
+            box-shadow: 0 0 25px rgba(0, 102, 204, 0.25);
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .project-info { flex: 1; }
+
+        .project-info h4 {
+            font-size: 19px; font-weight: 800;
+            color: var(--text); margin-bottom: 6px;
+        }
+
+        .project-info p {
+            font-size: 14px; color: var(--text-secondary); line-height: 1.6;
+        }
+
+        .project-arrow {
+            color: var(--text-muted); font-size: 18px;
+            transition: all 0.3s; align-self: center;
+        }
+
+        .project-card:hover .project-arrow {
+            color: var(--primary); transform: translateX(-6px);
+        }
+
+        .team-grid {
+            display: grid; grid-template-columns: 1fr; gap: 16px;
+        }
+
+        .team-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            display: flex; align-items: center; gap: 18px;
+            text-decoration: none; color: inherit;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .team-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.5s ease;
+        }
+
+        .team-card:hover {
+            border-color: var(--border-hover);
+            transform: translateX(-8px);
+            background: var(--surface-hover);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .team-card:hover::after { width: 100%; }
+
+        .member-avatar {
+            width: 72px; height: 72px; min-width: 72px;
+            border-radius: var(--radius);
+            overflow: hidden; border: 2px solid var(--border);
+            position: relative; transition: all 0.4s;
+        }
+
+        .member-avatar img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+
+        .team-card:hover .member-avatar {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 102, 204, 0.15);
+        }
+
+        .team-card:hover .member-avatar img { transform: scale(1.15); }
+
+        .member-info h4 {
+            font-size: 17px; font-weight: 800; color: var(--text);
+            margin-bottom: 3px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .member-info p { font-size: 13px; color: var(--text-secondary); }
+
+        .role-tag {
+            display: inline-block; font-size: 11px;
+            padding: 4px 12px; border-radius: 20px;
+            background: var(--primary-light);
+            color: var(--primary); margin-top: 8px;
+            font-weight: 700; border: 1px solid rgba(0,102,204,0.12);
+        }
+
+        .team-card.leader .role-tag {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--gold); border-color: rgba(245,158,11,0.2);
+        }
+
+        /* ===== Guestbook ===== */
+        .guestbook-section { background: rgba(0,0,0,0.015); }
+
+        .guestbook-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .guestbook-form-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            position: sticky; top: 100px;
+            height: fit-content;
+            box-shadow: var(--shadow);
+        }
+
+        .guestbook-form-wrap h3 {
+            font-size: 20px; font-weight: 800;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
+            color: var(--text);
+        }
+
+        .guestbook-form-wrap h3 i { color: var(--primary); }
+
+        .form-subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
+            display: block; font-size: 13px; font-weight: 600;
+            color: var(--text-secondary); margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%; background: var(--bg);
+            border: 1px solid var(--border); border-radius: 12px;
+            padding: 12px 16px; color: var(--text);
+            font-family: 'Cairo', sans-serif; font-size: 14px;
+            transition: all 0.3s; outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            background: var(--surface);
+        }
+
+        .form-group textarea { min-height: 100px; resize: vertical; }
+
+        .form-group select { cursor: pointer; }
+
+        .form-group select option { background: var(--surface); }
+
+        .btn-submit {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none; border-radius: 12px;
+            color: #fff; font-family: 'Cairo', sans-serif;
+            font-size: 15px; font-weight: 800;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 102, 204, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5; cursor: not-allowed; transform: none;
+        }
+
+        .messages-list {
+            display: flex; flex-direction: column; gap: 14px;
+            max-height: 700px; overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .message-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+
+        .message-card:hover {
+            border-color: var(--border-hover);
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .message-header {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .message-avatar {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-weight: 800; font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .message-header .msg-meta h5 {
+            font-size: 15px; font-weight: 700; color: var(--text);
+        }
+
+        .message-header .msg-meta span {
+            font-size: 12px; color: var(--text-muted);
+        }
+
+        .message-recipient {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; color: var(--primary);
+            background: var(--primary-light);
+            padding: 4px 10px; border-radius: 20px;
+            margin-bottom: 10px; font-weight: 600;
+        }
+
+        .message-body {
+            font-size: 14px; color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .empty-state {
+            text-align: center; padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+
+        /* ===== Footer Social Section ===== */
+        .footer-social {
+            margin-bottom: 24px;
+        }
+
+        .footer-social-title {
+            font-size: 16px; font-weight: 800;
+            color: var(--text); margin-bottom: 16px;
+        }
+
+        .footer-social-links {
+            display: flex; justify-content: center; gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-social-links a {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px; font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .footer-social-links a:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .footer-social-links a.tiktok:hover {
+            background: #000; color: #fff; border-color: #000;
+        }
+
+        .footer-social-links a.youtube:hover {
+            background: #ff0000; color: #fff; border-color: #ff0000;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 50px 24px; text-align: center;
+            background: var(--surface);
+        }
+
+        footer p { color: var(--text-muted); font-size: 14px; }
+
+        footer .heart { color: #ef4444; animation: heartbeat 1.5s infinite; }
+
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
+            display: none; position: fixed; z-index: 3000;
+            inset: 0; background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(20px);
             justify-content: center; align-items: center;
+            padding: 20px; opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .modal-content {
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 15px;
-            border: 2px solid var(--primary);
-            animation: zoomIn 0.3s ease;
+        .modal.active { display: flex; opacity: 1; }
+
+        .modal img {
+            max-width: 90%; max-height: 85vh;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes zoomIn { from {transform: scale(0.7); opacity:0} to {transform: scale(1); opacity:1} }
+        .modal-close {
+            position: absolute; top: 25px; left: 25px;
+            width: 48px; height: 48px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            color: var(--text); font-size: 20px;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
 
-        .close-btn { position: absolute; top: 25px; left: 25px; color: white; font-size: 40px; cursor: pointer; }
+        .modal-close:hover {
+            background: var(--primary); color: #fff;
+            border-color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .toast-container {
+            position: fixed; top: 90px; left: 24px;
+            z-index: 4000; display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .toast {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px; padding: 14px 20px;
+            display: flex; align-items: center; gap: 12px;
+            box-shadow: var(--shadow); color: var(--text);
+            font-size: 14px; font-weight: 600;
+            animation: toastIn 0.4s ease, toastOut 0.4s ease 3s forwards;
+            min-width: 280px;
+        }
+
+        .toast.success { border-color: rgba(34, 197, 94, 0.3); }
+        .toast.success i { color: #22c55e; }
+        .toast.error { border-color: rgba(239, 68, 68, 0.3); }
+        .toast.error i { color: #ef4444; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.85) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.2); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.2); }
+            70% { transform: scale(1); }
+        }
+
+        @keyframes toastIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes toastOut {
+            to { transform: translateX(-100%); opacity: 0; }
+        }
+
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .mobile-menu {
+            display: none; position: fixed; top: 72px; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px; z-index: 999;
+            flex-direction: column; gap: 4px;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu a {
+            padding: 12px 16px; border-radius: 10px;
+            color: var(--text-secondary); text-decoration: none;
+            font-weight: 600; font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu a:hover, .mobile-menu a.active {
+            background: var(--primary-light); color: var(--primary);
+        }
+
+        @media (min-width: 640px) {
+            .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+            .gallery-item:first-child { grid-column: span 2; grid-row: span 2; }
+        }
 
         @media (min-width: 768px) {
-            .gallery { grid-template-columns: repeat(4, 1fr); }
             .projects-grid { grid-template-columns: repeat(3, 1fr); }
             .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .project-card { flex-direction: column; text-align: center; padding: 32px 24px; }
+            .project-card::before { top: 0; right: 0; width: 100%; height: 4px; }
+            .project-arrow { display: none; }
+            .guestbook-layout { grid-template-columns: 360px 1fr; }
+        }
+
+        @media (min-width: 1024px) {
+            .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (max-width: 767px) {
+            .nav-links { display: none; }
+            .nav-toggle { display: block; }
+            .hero-stats { gap: 16px; flex-wrap: wrap; }
+            .stat-item h3 { font-size: 24px; }
+            .social-nav { display: none !important; }
+            .social-hero { flex-direction: column; align-items: center; }
+            .social-hero .social-btn { width: 100%; max-width: 280px; justify-content: center; }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
 
-<div id="hero-slideshow">
-    <div class="slide active" style="background-image: url('صورة1.jpg');"></div>
-    <div class="slide" style="background-image: url('صورة2.jpg');"></div>
-    <div class="slide" style="background-image: url('day3.jpeg');"></div>
-    <div class="slide" style="background-image: url('day4.jpeg');"></div>
+<canvas id="mesh-canvas"></canvas>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="navbar" id="navbar">
+    <a href="#" class="nav-brand">
+        <img src="لوجو.jpg" alt="Mechtron">
+        <span>MECHTRON</span>
+    </a>
+
+    <ul class="nav-links">
+        <li><a href="#hero" class="active">الرئيسية</a></li>
+        <li><a href="#gallery">المعرض</a></li>
+        <li><a href="#projects">المشاريع</a></li>
+        <li><a href="#team">الفريق</a></li>
+        <li><a href="#guestbook">رسائل الزوار</a></li>
+    </ul>
+
+    <div class="nav-actions">
+        <!-- روابط التواصل في النافبار -->
+        <div class="social-nav">
+            <a href="https://vm.tiktok.com/ZS9hsfpKoBXLo-n1MmU/" title="TikTok" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://youtube.com/@mechtronteam?si=jxBv6xCCIqphzmHp" title="YouTube" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+        <button class="nav-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#hero" onclick="toggleMobileMenu()">الرئيسية</a>
+    <a href="#gallery" onclick="toggleMobileMenu()">المعرض</a>
+    <a href="#projects" onclick="toggleMobileMenu()">المشاريع</a>
+    <a href="#team" onclick="toggleMobileMenu()">الفريق</a>
+    <a href="#guestbook" onclick="toggleMobileMenu()">رسائل الزوار</a>
 </div>
 
-<div class="container">
-    <header class="main-header">
-        <div class="team-logo-container">
-            <div class="team-logo-inner"><img src="لوجو.jpg" alt="Mechtron Logo"></div>
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <i class="fas fa-university"></i>
+            جامعة السويس · كلية التكنولوجيا والتعليم 
         </div>
-        <div class="header-text">
-            <h1 style="font-size: 14px; opacity: 0.6;">جامعة السويس</h1>
-            <h2 style="font-size: 18px; font-weight: 600;">كلية التكنولوجيا والتعليم</h2>
-            <div class="team-name-big">MECHTRON</div>
-            <p style="margin-top: 5px; font-size: 12px; color: var(--primary); font-weight: 800;">
-                <i class="fas fa-microchip"></i> الفرقة الأولى  
-            </p>
+
+        <div class="hero-logo-wrap">
+            <div class="hero-logo-inner">
+                <img src="لوجو.jpg" alt="Mechtron Logo">
+            </div>
         </div>
-    </header>
 
-    <h2 class="section-title"><i class="fas fa-images"></i> معرض الصور</h2>
-    <div class="gallery">
-        <div class="gallery-box" onclick="openModal('صورة1.jpg')"><img src="صورة1.jpg" alt="1"></div>
-        <div class="gallery-box" onclick="openModal('صورة2.jpg')"><img src="صورة2.jpg" alt="2"></div>
-        <div class="gallery-box" onclick="openModal('day.jpeg')"><img src="day3.jpeg" alt="3"></div>
-        <div class="gallery-box" onclick="openModal('day4.jpeg')"><img src="day4.jpeg" alt="4"></div>
-        <div class="gallery-box" onclick="openModal('day5.jpg')"><img src="day5.jpg" alt="5"></div>
-        <div class="gallery-box" onclick="openModal('day6.jpg')"><img src="day6.jpg" alt="6"></div>
+        <h1>MECHTRON</h1>
+        <p class="hero-sub">فريق هندسي متميز يجمع بين الإبداع والتقنية</p>
+        <div class="hero-dept">
+            <i class="fas fa-microchip"></i>
+           
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat-item">
+                <h3>8</h3>
+                <p>أعضاء الفريق</p>
+            </div>
+            <div class="stat-item">
+                <h3>3</h3>
+                <p>مشاريع منفذة</p>
+            </div>
+            <div class="stat-item">
+                <h3>1</h3>
+                <p>رؤية واحدة</p>
+            </div>
+        </div>
+
+        <!-- أزرار التواصل الاجتماعي -->
+        <div class="social-hero">
+            <a href="https://vm.tiktok.com/ZS9hsfpKoBXLo-n1MmU/" class="social-btn tiktok" target="_blank">
+                <i class="fab fa-tiktok"></i> تابعنا على TikTok
+            </a>
+            <a href="https://youtube.com/@mechtronteam?si=jxBv6xCCIqphzmHp" class="social-btn youtube" target="_blank">
+                <i class="fab fa-youtube"></i> اشترك على YouTube
+            </a>
+        </div>
     </div>
 
-    <h2 class="section-title"><i class="fas fa-project-diagram"></i> مشاريع الفريق</h2>
-    <div class="projects-grid">
-        <a href="saw22.html" class="p-card"><i class="fas fa-cog fa-2x"></i> <div><h4>ماكينة المقشطة الافقية</h4><small>اضغط للتفاصيل</small></div></a>
-        <a href="افراد2.html" class="p-card"><i class="fas fa-drafting-compass fa-2x"></i> <div><h4>افراد الاسطوانة المقطوعة  </h4><small>اضغط للتفاصيل</small></div></a>
-        <a href="لوحة.html" class="p-card"><i class="fas fa-box fa-2x"></i> <div><h4>لوحة المسامير</h4><small>تجميع الوصلات</small></div></a>
+    <div class="scroll-indicator" onclick="document.getElementById('gallery').scrollIntoView({behavior:'smooth'})">
+        <span>استكشف المزيد</span>
+        <i class="fas fa-chevron-down"></i>
     </div>
+</section>
 
-    <h2 class="section-title"><i class="fas fa-users"></i> فريق Mechtron</h2>
-    <div class="team-grid">
-        <a href="بورت اكرم.html" class="member">
-            <img src="77.jpg" alt="أكرم محمد">
-            <div class="m-info"><h4>أكرم محمد <i class="fas fa-crown" style="color: #ffd700;"></i></h4><p>مصمم هندسي (القائد)</p></div>
-        </a>
-        <a href="بورت شهاب.html" class="member">
-            <img src="20.jpg" alt="شهاب محمد">
-            <div class="m-info"><h4>شهاب محمد</h4><p>مصمم هوية وأخصائي تشغيل</p></div>
-        </a>
-        <a href="محمد عبد المحسن.html" class="member">
-            <img src="10.jpg" alt="محمد عبد المحسن">
-            <div class="m-info"><h4>محمد عبد المحسن</h4><p>مسؤول العرض والتقديم</p></div>
-        </a>
-        <a href="بورت ايمان .html" class="member">
-            <img src="ايمان1.jpg" alt="إيمان أشرف">
-            <div class="m-info"><h4>إيمان أشرف</h4><p>مسؤولة التنظيم العام</p></div>
-        </a>
-        <a href="بورت شروق.html" class="member">
-            <img src="شروق.jpg" alt="شروق عاصم">
-            <div class="m-info"><h4>شروق عاصم</h4><p>منسقة عرض ومساعد فني</p></div>
-        </a>
-        <a href="بورت حسن .html" class="member">
-            <img src="حسن.jpg" alt="حسن أشرف">
-            <div class="m-info"><h4>حسن أشرف</h4><p>مسؤول المشتريات والمنسق</p></div>
-        </a>
-        <a href="عبدالرحمن.html" class="member">
-            <img src="عبده.jpg" alt="عبد الرحمن يحيى">
-            <div class="m-info"><h4>عبد الرحمن يحيى</h4><p>مسؤول تشغيل CNC</p></div>
-        </a>
-         <a href="بورت بسملة.html" class="member">
-            <img src="بسملة1.jpeg" alt=بسملة عبد القادر">
-            <div class="m-info"><h4>بسملة عبد القادر</h4><p>منسقة العرض </p></div>
-        </a>
+<section id="gallery">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">معرض الصور</div>
+            <h2 class="section-title">لحظات لا تُنسى</h2>
+            <p class="section-desc">مجموعة من أبرز اللحظات والأنشطة التي خاضها الفريق</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item reveal" onclick="openModal('صورة1.jpg')">
+                <img src="صورة1.jpg" alt="صورة 1">
+                <div class="gallery-overlay"><span>صورة من الأرشيف</span></div>
+                <div class="zoom-btn"><i class="fas fa-expand"></i></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openModal('صورة2.jpg')">
+                <img src="صورة2.jpg" alt="صورة 2">
+                <div class="gallery-overlay"><span>صورة من الأرشيف</span></div>
+                <div class="zoom-btn"><i class="fas fa-expand"></i></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openModal('day.jpeg')">
+                <img src="day3.jpeg" alt="صورة 3">
+                <div class="gallery-overlay"><span>صورة من الأرشيف</span></div>
+                <div class="zoom-btn"><i class="fas fa-expand"></i></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openModal('day4.jpeg')">
+                <img src="day4.jpeg" alt="صورة 4">
+                <div class="gallery-overlay"><span>صورة من الأرشيف</span></div>
+                <div class="zoom-btn"><i class="fas fa-expand"></i></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openModal('day5.jpg')">
+                <img src="day5.jpg" alt="صورة 5">
+                <div class="gallery-overlay"><span>صورة من الأرشيف</span></div>
+                <div class="zoom-btn"><i class="fas fa-expand"></i></div>
+            </div>
+            <div class="gallery-item reveal" onclick="openModal('day6.jpg')">
+                <img src="day6.jpg" alt="صورة 6">
+                <div class="gallery-overlay"><span>صورة من الأرشيف</span></div>
+                <div class="zoom-btn"><i class="fas fa-expand"></i></div>
+            </div>
+        </div>
     </div>
+</section>
 
-    <footer style="text-align: center; padding: 40px; font-size: 11px; opacity: 0.6;">جميع الحقوق محفوظة لفريق Mechtron © 2026</footer>
-</div>
+<section id="projects" style="background: rgba(0,0,0,0.01);">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">مشاريعنا</div>
+            <h2 class="section-title">إنجازات الفريق</h2>
+            <p class="section-desc">مشاريع هندسية وتقنية نفذها الفريق بإتقان وإبداع</p>
+        </div>
 
-<div id="imageModal" class="modal" onclick="closeModal()">
-    <span class="close-btn">&times;</span>
-    <img class="modal-content" id="fullImg">
+        <div class="projects-grid">
+            <a href="saw22.html" class="project-card reveal">
+                <div class="project-icon"><i class="fas fa-cog"></i></div>
+                <div class="project-info">
+                    <h4>ماكينة المقشطة الأفقية</h4>
+                    <p>تصميم وتنفيذ ماكينة مقشطة أفقية بدقة عالية باستخدام أحدث التقنيات الهندسية</p>
+                </div>
+                <div class="project-arrow"><i class="fas fa-arrow-left"></i></div>
+            </a>
+
+            <a href="افراد2.html" class="project-card reveal">
+                <div class="project-icon"><i class="fas fa-drafting-compass"></i></div>
+                <div class="project-info">
+                    <h4>إفراد الأسطوانة المقطوعة</h4>
+                    <p>مشروع هندسي دقيق يهدف لإفراد الأسطوانات المقطوعة بزوايا محددة</p>
+                </div>
+                <div class="project-arrow"><i class="fas fa-arrow-left"></i></div>
+            </a>
+
+            <a href="لوحة.html" class="project-card reveal">
+                <div class="project-icon"><i class="fas fa-box"></i></div>
+                <div class="project-info">
+                    <h4>لوحة المسامير</h4>
+                    <p>تجميع وتركيب الوصلات الميكانيكية باستخدام لوحة مسامير احترافية</p>
+                </div>
+                <div class="project-arrow"><i class="fas fa-arrow-left"></i></div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section id="team">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">فريقنا</div>
+            <h2 class="section-title">أبطال Mechtron</h2>
+            <p class="section-desc">فريق متكامل من الطلاب المبدعين والمتميزين</p>
+        </div>
+
+        <div class="team-grid">
+            <a href="بورت اكرم.html" class="team-card leader reveal">
+                <div class="member-avatar"><img src="77.jpg" alt="أكرم محمد"></div>
+                <div class="member-info">
+                    <h4>أكرم محمد <i class="fas fa-crown" style="color: var(--gold); font-size: 13px;"></i></h4>
+                    <p>مصمم هندسي</p>
+                    <span class="role-tag">القائد</span>
+                </div>
+            </a>
+
+            <a href="بورت شهاب.html" class="team-card reveal">
+                <div class="member-avatar"><img src="20.jpg" alt="شهاب محمد"></div>
+                <div class="member-info">
+                    <h4>شهاب محمد</h4>
+                    <p>مصمم هوية وأخصائي تشغيل</p>
+                </div>
+            </a>
+
+            <a href="محمد عبد المحسن.html" class="team-card reveal">
+                <div class="member-avatar"><img src="10.jpg" alt="محمد عبد المحسن"></div>
+                <div class="member-info">
+                    <h4>محمد عبد المحسن</h4>
+                    <p>مسؤول العرض والتقديم</p>
+                </div>
+            </a>
+
+            <a href="بورت ايمان .html" class="team-card reveal">
+                <div class="member-avatar"><img src="ايمان1.jpg" alt="إيمان أشرف"></div>
+                <div class="member-info">
+                    <h4>إيمان أشرف</h4>
+                    <p>مسؤولة التنظيم العام</p>
+                </div>
+            </a>
+
+            <a href="بورت شروق.html" class="team-card reveal">
+                <div class="member-avatar"><img src="شروق.jpg" alt="شروق عاصم"></div>
+                <div class="member-info">
+                    <h4>شروق عاصم</h4>
+                    <p>منسقة عرض ومساعد فني</p>
+                </div>
+            </a>
+
+            <a href="بورت حسن .html" class="team-card reveal">
+                <div class="member-avatar"><img src="حسن.jpg" alt="حسن أشرف"></div>
+                <div class="member-info">
+                    <h4>حسن أشرف</h4>
+                    <p>مسؤول المشتريات والمنسق</p>
+                </div>
+            </a>
+
+            <a href="عبدالرحمن.html" class="team-card reveal">
+                <div class="member-avatar"><img src="عبده.jpg" alt="عبد الرحمن يحيى"></div>
+                <div class="member-info">
+                    <h4>عبد الرحمن يحيى</h4>
+                    <p>مسؤول تشغيل CNC</p>
+                </div>
+            </a>
+
+            <a href="بورت بسملة.html" class="team-card reveal">
+                <div class="member-avatar"><img src="بسملة1.jpeg" alt="بسملة عبد القادر"></div>
+                <div class="member-info">
+                    <h4>بسملة عبد القادر</h4>
+                    <p>منسقة العرض</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section id="guestbook" class="guestbook-section">
+    <div class="container">
+        <div class="section-header reveal">
+            <div class="section-label">رسائل الزوار</div>
+            <h2 class="section-title">كلمات من القلب</h2>
+            <p class="section-desc">اترك رسالة تشجيع لفريق Mechtron أو لأحد أعضائه</p>
+        </div>
+
+        <div class="guestbook-layout">
+            <div class="guestbook-form-wrap reveal">
+                <h3><i class="fas fa-pen-fancy"></i> اكتب رسالتك</h3>
+                <p class="form-subtitle">اكتب اسمك ورسالتك </p>
+
+                <div class="form-group">
+                    <label>اسمك</label>
+                    <input type="text" id="msgName" placeholder="اكتب اسمك هنا...">
+                </div>
+                <div class="form-group">
+                    <label>إلى (اختياري)</label>
+                    <select id="msgRecipient">
+                        <option value="">الفريق بأكمله</option>
+                        <option value="أكرم محمد">أكرم محمد</option>
+                        <option value="شهاب محمد">شهاب محمد</option>
+                        <option value="محمد عبد المحسن">محمد عبد المحسن</option>
+                        <option value="إيمان أشرف">إيمان أشرف</option>
+                        <option value="شروق عاصم">شروق عاصم</option>
+                        <option value="حسن أشرف">حسن أشرف</option>
+                        <option value="عبد الرحمن يحيى">عبد الرحمن يحيى</option>
+                        <option value="بسملة عبد القادر">بسملة عبد القادر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>رسالتك</label>
+                    <textarea id="msgBody" placeholder="اكتب رسالتك هنا..."></textarea>
+                </div>
+                <button class="btn-submit" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i> إرسال الرسالة
+                </button>
+            </div>
+
+            <div class="messages-area reveal">
+                <div class="messages-list" id="messagesList">
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>لا توجد رسائل بعد. كن أول من يترك رسالة!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <!-- قسم التواصل الاجتماعي في الفوتر -->
+        <div class="footer-social">
+            <div class="footer-social-title">تابعنا على السوشيال ميديا</div>
+            <div class="footer-social-links">
+                <a href="https://vm.tiktok.com/ZS9hsfpKoBXLo-n1MmU/" class="tiktok" target="_blank">
+                    <i class="fab fa-tiktok"></i> TikTok
+                </a>
+                <a href="https://youtube.com/@mechtronteam?si=jxBv6xCCIqphzmHp" class="youtube" target="_blank">
+                    <i class="fab fa-youtube"></i> YouTube
+                </a>
+            </div>
+        </div>
+        <p>
+            جميع الحقوق محفوظة لفريق Mechtron © 2026
+            <br>
+            <span style="font-size: 12px; margin-top: 10px; display: inline-block;">
+               <i class="fas fa-heart heart"></i>  كلية التكنولوجيا والتعليم – جامعة السويس
+            </span>
+        </p>
+    </div>
+</footer>
+
+<div id="imageModal" class="modal" onclick="closeModal(event)">
+    <div class="modal-close" onclick="closeModal(event)"><i class="fas fa-times"></i></div>
+    <img id="fullImg" alt="صورة مكبرة">
 </div>
 
 <script>
-    // تغيير الخلفية تلقائياً
-    let slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-    function nextSlide() {
-        slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add('active');
-    }
-    setInterval(nextSlide, 5000); // كل 5 ثواني
+    // ===================== Guestbook =====================
+    const STORAGE_KEY = 'mechtron_messages';
 
-    // وظائف التكبير
-    function openModal(imgSrc) {
-        const modal = document.getElementById("imageModal");
-        const fullImg = document.getElementById("fullImg");
-        modal.style.display = "flex";
-        fullImg.src = imgSrc;
+    function getInitials(name) {
+        return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
     }
-    function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
+
+    function loadMessages() {
+        const list = document.getElementById('messagesList');
+        const messages = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+        if (messages.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>لا توجد رسائل بعد. كن أول من يترك رسالة!</p>
+                </div>`;
+            return;
+        }
+
+        list.innerHTML = '';
+        messages.slice().reverse().forEach(msg => {
+            const card = document.createElement('div');
+            card.className = 'message-card reveal visible';
+            card.innerHTML = `
+                <div class="message-header">
+                    <div class="message-avatar">${getInitials(msg.name)}</div>
+                    <div class="msg-meta">
+                        <h5>${escapeHtml(msg.name)}</h5>
+                        <span>${msg.date}</span>
+                    </div>
+                </div>
+                ${msg.recipient ? `<div class="message-recipient"><i class="fas fa-user"></i> إلى: ${escapeHtml(msg.recipient)}</div>` : ''}
+                <div class="message-body">${escapeHtml(msg.body)}</div>
+            `;
+            list.appendChild(card);
+        });
     }
+
+    function sendMessage() {
+        const nameInput = document.getElementById('msgName');
+        const bodyInput = document.getElementById('msgBody');
+        const recipientInput = document.getElementById('msgRecipient');
+
+        const name = nameInput.value.trim();
+        const body = bodyInput.value.trim();
+        const recipient = recipientInput.value;
+
+        if (!name) { showToast('يرجى كتابة اسمك أولاً', 'error'); nameInput.focus(); return; }
+        if (!body) { showToast('يرجى كتابة رسالة أولاً', 'error'); bodyInput.focus(); return; }
+
+        const btn = document.querySelector('.btn-submit');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+
+        setTimeout(() => {
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            messages.push({
+                name: name, body: body, recipient: recipient,
+                date: new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+            bodyInput.value = '';
+            showToast('تم إرسال رسالتك بنجاح!', 'success');
+            loadMessages();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الرسالة';
+        }, 600);
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    loadMessages();
+
+    // ===================== Toast =====================
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i><span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3500);
+    }
+
+    // ===================== Mesh Canvas (Light Theme) =====================
+    const canvas = document.getElementById('mesh-canvas');
+    const ctx = canvas.getContext('2d');
+    let meshPoints = [];
+    let mx = 0, my = 0;
+
+    function resizeMesh() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initMesh();
+    }
+
+    function initMesh() {
+        meshPoints = [];
+        const cols = Math.ceil(canvas.width / 70);
+        const rows = Math.ceil(canvas.height / 70);
+        for (let i = 0; i <= cols; i++) {
+            for (let j = 0; j <= rows; j++) {
+                meshPoints.push({
+                    x: i * 70, y: j * 70,
+                    baseX: i * 70, baseY: j * 70,
+                    offset: Math.random() * Math.PI * 2
+                });
+            }
+        }
+    }
+
+    function drawMesh() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const time = Date.now() * 0.0006;
+
+        meshPoints.forEach(p => {
+            const dx = mx - p.baseX;
+            const dy = my - p.baseY;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            const force = Math.max(0, 1 - dist / 300);
+
+            p.x = p.baseX + Math.sin(time + p.offset) * 6 + dx * force * 0.1;
+            p.y = p.baseY + Math.cos(time + p.offset * 0.7) * 6 + dy * force * 0.1;
+        });
+
+        const cols = Math.ceil(canvas.width / 70);
+        const rows = Math.ceil(canvas.height / 70);
+
+        for (let i = 0; i <= cols; i++) {
+            for (let j = 0; j <= rows; j++) {
+                const idx = i * (rows + 1) + j;
+                const p = meshPoints[idx];
+                if (!p) continue;
+
+                const right = meshPoints[(i+1) * (rows+1) + j];
+                const bottom = meshPoints[i * (rows+1) + (j+1)];
+
+                if (right) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(0, 102, 204, ${0.06 + Math.sin(time + p.offset)*0.03})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(right.x, right.y);
+                    ctx.stroke();
+                }
+                if (bottom) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(124, 58, 237, ${0.04 + Math.cos(time + p.offset)*0.02})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(bottom.x, bottom.y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        meshPoints.forEach(p => {
+            const dist = Math.sqrt((mx-p.x)**2 + (my-p.y)**2);
+            const alpha = dist < 200 ? 0.2 * (1 - dist/200) : 0.04;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, dist < 150 ? 2 : 1, 0, Math.PI*2);
+            ctx.fillStyle = `rgba(0, 102, 204, ${alpha})`;
+            ctx.fill();
+        });
+
+        requestAnimationFrame(drawMesh);
+    }
+
+    window.addEventListener('resize', resizeMesh);
+    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    resizeMesh();
+    drawMesh();
+
+    // ===================== Navbar Scroll =====================
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // ===================== Mobile Menu =====================
+    function toggleMobileMenu() {
+        document.getElementById('mobileMenu').classList.toggle('open');
+    }
+
+    // ===================== Active Link =====================
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a, .mobile-menu a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(sec => {
+            const top = sec.offsetTop - 100;
+            if (window.scrollY >= top) current = sec.getAttribute('id');
+        });
+        navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+    });
+
+    // ===================== Scroll Reveal =====================
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ===================== Lightbox =====================
+    function openModal(src) {
+        const modal = document.getElementById('imageModal');
+        document.getElementById('fullImg').src = src;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+        if (e.target.classList.contains('modal') || e.target.closest('.modal-close')) {
+            document.getElementById('imageModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            document.getElementById('imageModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
 </script>
 
 </body>
