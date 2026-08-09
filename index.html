@@ -511,146 +511,164 @@
             color: var(--gold); border-color: rgba(245,158,11,0.2);
         }
 
-        /* ===== Guestbook ===== */
-        .guestbook-section { background: rgba(0,0,0,0.015); }
+        /* ===== Timeline / Journey ===== */
+        .timeline-section { background: linear-gradient(to bottom, var(--bg), rgba(0,102,204,0.02), var(--bg)); }
 
-        .guestbook-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 0;
         }
 
-        .guestbook-form-wrap {
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            width: 50%;
+            padding: 0 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-right: auto;
+            text-align: left;
+            padding-left: 0;
+            padding-right: 50px;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: auto;
+            text-align: right;
+            padding-right: 0;
+            padding-left: 50px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 8px;
+            width: 20px; height: 20px;
+            background: var(--surface);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 0 6px rgba(0, 102, 204, 0.1);
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 8px rgba(124, 58, 237, 0.15);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot { left: -10px; }
+        .timeline-item:nth-child(even) .timeline-dot { right: -10px; }
+
+        .timeline-content {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 32px;
-            position: sticky; top: 100px;
-            height: fit-content;
+            padding: 28px;
             box-shadow: var(--shadow);
+            transition: all 0.4s;
+            position: relative;
         }
 
-        .guestbook-form-wrap h3 {
-            font-size: 20px; font-weight: 800;
-            margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
-            color: var(--text);
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 0; height: 0;
+            border-style: solid;
         }
 
-        .guestbook-form-wrap h3 i { color: var(--primary); }
-
-        .form-subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
-
-        .form-group { margin-bottom: 18px; }
-
-        .form-group label {
-            display: block; font-size: 13px; font-weight: 600;
-            color: var(--text-secondary); margin-bottom: 8px;
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            left: -12px;
+            border-width: 10px 12px 10px 0;
+            border-color: transparent var(--border) transparent transparent;
         }
 
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%; background: var(--bg);
-            border: 1px solid var(--border); border-radius: 12px;
-            padding: 12px 16px; color: var(--text);
-            font-family: 'Cairo', sans-serif; font-size: 14px;
-            transition: all 0.3s; outline: none;
+        .timeline-item:nth-child(even) .timeline-content::before {
+            right: -12px;
+            border-width: 10px 0 10px 12px;
+            border-color: transparent transparent transparent var(--border);
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
-            background: var(--surface);
-        }
-
-        .form-group textarea { min-height: 100px; resize: vertical; }
-
-        .form-group select { cursor: pointer; }
-
-        .form-group select option { background: var(--surface); }
-
-        .btn-submit {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border: none; border-radius: 12px;
-            color: #fff; font-family: 'Cairo', sans-serif;
-            font-size: 15px; font-weight: 800;
-            cursor: pointer; transition: all 0.3s;
-            box-shadow: 0 4px 20px rgba(0, 102, 204, 0.2);
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0, 102, 204, 0.3);
-        }
-
-        .btn-submit:disabled {
-            opacity: 0.5; cursor: not-allowed; transform: none;
-        }
-
-        .messages-list {
-            display: flex; flex-direction: column; gap: 14px;
-            max-height: 700px; overflow-y: auto;
-            padding-right: 8px;
-        }
-
-        .message-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-            transition: all 0.3s;
-            box-shadow: var(--shadow);
-        }
-
-        .message-card:hover {
-            border-color: var(--border-hover);
-            transform: translateX(-4px);
+        .timeline-content:hover {
+            transform: translateY(-4px);
             box-shadow: var(--shadow-hover);
+            border-color: var(--border-hover);
         }
 
-        .message-header {
-            display: flex; align-items: center; gap: 12px;
+        .timeline-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 5px 14px;
+            border-radius: 20px;
             margin-bottom: 12px;
         }
 
-        .message-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-weight: 800; font-size: 16px;
-            flex-shrink: 0;
+        .timeline-content h4 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 8px;
         }
 
-        .message-header .msg-meta h5 {
-            font-size: 15px; font-weight: 700; color: var(--text);
-        }
-
-        .message-header .msg-meta span {
-            font-size: 12px; color: var(--text-muted);
-        }
-
-        .message-recipient {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 12px; color: var(--primary);
-            background: var(--primary-light);
-            padding: 4px 10px; border-radius: 20px;
-            margin-bottom: 10px; font-weight: 600;
-        }
-
-        .message-body {
-            font-size: 14px; color: var(--text-secondary);
+        .timeline-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
             line-height: 1.7;
         }
 
-        .empty-state {
-            text-align: center; padding: 60px 20px;
-            color: var(--text-muted);
+        .timeline-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--primary-light), rgba(124,58,237,0.08));
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s;
         }
 
-        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+        .timeline-item:hover .timeline-icon {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff;
+            border-color: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before { right: 20px; transform: none; }
+            .timeline-item { width: 100%; padding-left: 60px !important; padding-right: 20px !important; margin-left: 0 !important; margin-right: 0 !important; text-align: right !important; }
+            .timeline-item:nth-child(odd) .timeline-content::before,
+            .timeline-item:nth-child(even) .timeline-content::before { left: -12px; right: auto; border-width: 10px 12px 10px 0; border-color: transparent var(--border) transparent transparent; }
+            .timeline-dot { right: auto !important; left: 10px !important; }
+        }
 
         /* ===== Footer Social Section ===== */
         .footer-social {
@@ -853,6 +871,7 @@
             .social-hero .social-btn { width: 100%; max-width: 280px; justify-content: center; }
         }
     </style>
+
 <base target="_blank">
 </head>
 <body>
@@ -872,7 +891,7 @@
         <li><a href="#gallery">المعرض</a></li>
         <li><a href="#projects">المشاريع</a></li>
         <li><a href="#team">الفريق</a></li>
-        <li><a href="#guestbook">رسائل الزوار</a></li>
+        <li><a href="#journey">رحلتنا</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -892,7 +911,7 @@
     <a href="#gallery" onclick="toggleMobileMenu()">المعرض</a>
     <a href="#projects" onclick="toggleMobileMenu()">المشاريع</a>
     <a href="#team" onclick="toggleMobileMenu()">الفريق</a>
-    <a href="#guestbook" onclick="toggleMobileMenu()">رسائل الزوار</a>
+    <a href="#journey" onclick="toggleMobileMenu()">رحلتنا</a>
 </div>
 
 <section class="hero" id="hero">
@@ -1106,52 +1125,64 @@
     </div>
 </section>
 
-<section id="guestbook" class="guestbook-section">
+
+
+<section id="journey" class="timeline-section">
     <div class="container">
         <div class="section-header reveal">
-            <div class="section-label">رسائل الزوار</div>
-            <h2 class="section-title">كلمات من القلب</h2>
-            <p class="section-desc">اترك رسالة تشجيع لفريق Mechtron أو لأحد أعضائه</p>
+            <div class="section-label">رحلتنا</div>
+            <h2 class="section-title">مسيرة الفريق</h2>
+            <p class="section-desc">محطات مهمة في رحلة فريق Mechtron من التأسيس حتى الآن</p>
         </div>
 
-        <div class="guestbook-layout">
-            <div class="guestbook-form-wrap reveal">
-                <h3><i class="fas fa-pen-fancy"></i> اكتب رسالتك</h3>
-                <p class="form-subtitle">اكتب اسمك ورسالتك </p>
-
-                <div class="form-group">
-                    <label>اسمك</label>
-                    <input type="text" id="msgName" placeholder="اكتب اسمك هنا...">
+        <div class="timeline">
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-icon"><i class="fas fa-flag"></i></div>
+                    <div class="timeline-date"><i class="fas fa-calendar-alt"></i> ابريل 20265</div>
+                    <h4>تأسيس الفريق</h4>
+                    <p>انطلق فريق Mechtron من كلية التكنولوجيا والتعليم – جامعة السويس، بتجميع مجموعة من الطلاب المبدعين في الفرقة الاولى.</p>
                 </div>
-                <div class="form-group">
-                    <label>إلى (اختياري)</label>
-                    <select id="msgRecipient">
-                        <option value="">الفريق بأكمله</option>
-                        <option value="أكرم محمد">أكرم محمد</option>
-                        <option value="شهاب محمد">شهاب محمد</option>
-                        <option value="محمد عبد المحسن">محمد عبد المحسن</option>
-                        <option value="إيمان أشرف">إيمان أشرف</option>
-                        <option value="شروق عاصم">شروق عاصم</option>
-                        <option value="حسن أشرف">حسن أشرف</option>
-                        <option value="عبد الرحمن يحيى">عبد الرحمن يحيى</option>
-                        <option value="بسملة عبد القادر">بسملة عبد القادر</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>رسالتك</label>
-                    <textarea id="msgBody" placeholder="اكتب رسالتك هنا..."></textarea>
-                </div>
-                <button class="btn-submit" onclick="sendMessage()">
-                    <i class="fas fa-paper-plane"></i> إرسال الرسالة
-                </button>
             </div>
 
-            <div class="messages-area reveal">
-                <div class="messages-list" id="messagesList">
-                    <div class="empty-state">
-                        <i class="fas fa-inbox"></i>
-                        <p>لا توجد رسائل بعد. كن أول من يترك رسالة!</p>
-                    </div>
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-icon"><i class="fas fa-cogs"></i></div>
+                    <div class="timeline-date"><i class="fas fa-calendar-alt"></i> أكتوبر 2025</div>
+                    <h4>أول مشروع: ماكينة المقشطة</h4>
+                    <p>بدأ الفريق أولى مشاريعه العملية بتصميم وتنفيذ ماكينة المقشطة الأفقية بدقة عالية.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-icon"><i class="fas fa-drafting-compass"></i></div>
+                    <div class="timeline-date"><i class="fas fa-calendar-alt"></i> نوفمبر 2025</div>
+                    <h4>مشروع إفراد الأسطوانة</h4>
+                    <p>تنفيذ مشروع هندسي دقيق لإفراد الأسطوانات المقطوعة، مما أضاف خبرة جديدة للفريق في التصنيع الدقيق.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-icon"><i class="fas fa-box"></i></div>
+                    <div class="timeline-date"><i class="fas fa-calendar-alt"></i> ديسمبر 2025</div>
+                    <h4>مشروع لوحة المسامير</h4>
+                    <p>إنجاز مشروع تجميع الوصلات الميكانيكية باستخدام لوحة مسامير احترافية، مكملاً سلسلة المشاريع الهندسية.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="timeline-date"><i class="fas fa-calendar-alt"></i> 2026 والمستقبل</div>
+                    <h4>نحو المزيد من الإبداع</h4>
+                    <p>يستمر الفريق في تطوير مهاراته وتنفيذ مشاريع جديدة تخدم المجتمع الأكاديمي والهندسي.</p>
                 </div>
             </div>
         </div>
@@ -1188,95 +1219,30 @@
 </div>
 
 <script>
-    // ===================== Guestbook =====================
-    const STORAGE_KEY = 'mechtron_messages';
-
-    function getInitials(name) {
-        return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-    }
-
-    function loadMessages() {
-        const list = document.getElementById('messagesList');
-        const messages = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-
-        if (messages.length === 0) {
-            list.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <p>لا توجد رسائل بعد. كن أول من يترك رسالة!</p>
-                </div>`;
-            return;
-        }
-
-        list.innerHTML = '';
-        messages.slice().reverse().forEach(msg => {
-            const card = document.createElement('div');
-            card.className = 'message-card reveal visible';
-            card.innerHTML = `
-                <div class="message-header">
-                    <div class="message-avatar">${getInitials(msg.name)}</div>
-                    <div class="msg-meta">
-                        <h5>${escapeHtml(msg.name)}</h5>
-                        <span>${msg.date}</span>
-                    </div>
-                </div>
-                ${msg.recipient ? `<div class="message-recipient"><i class="fas fa-user"></i> إلى: ${escapeHtml(msg.recipient)}</div>` : ''}
-                <div class="message-body">${escapeHtml(msg.body)}</div>
-            `;
-            list.appendChild(card);
+        // ===================== Timeline Reveal =====================
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
         });
-    }
+    }, { threshold: 0.15 });
+    timelineItems.forEach(item => timelineObserver.observe(item));
 
-    function sendMessage() {
-        const nameInput = document.getElementById('msgName');
-        const bodyInput = document.getElementById('msgBody');
-        const recipientInput = document.getElementById('msgRecipient');
 
-        const name = nameInput.value.trim();
-        const body = bodyInput.value.trim();
-        const recipient = recipientInput.value;
+    // ===================== Smooth Scroll for Anchors =====================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
 
-        if (!name) { showToast('يرجى كتابة اسمك أولاً', 'error'); nameInput.focus(); return; }
-        if (!body) { showToast('يرجى كتابة رسالة أولاً', 'error'); bodyInput.focus(); return; }
-
-        const btn = document.querySelector('.btn-submit');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
-
-        setTimeout(() => {
-            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            messages.push({
-                name: name, body: body, recipient: recipient,
-                date: new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-            bodyInput.value = '';
-            showToast('تم إرسال رسالتك بنجاح!', 'success');
-            loadMessages();
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الرسالة';
-        }, 600);
-    }
-
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    loadMessages();
-
-    // ===================== Toast =====================
-    function showToast(message, type = 'success') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i><span>${message}</span>`;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 3500);
-    }
-
-    // ===================== Mesh Canvas (Light Theme) =====================
+// ===================== Mesh Canvas (Light Theme) =====================
     const canvas = document.getElementById('mesh-canvas');
     const ctx = canvas.getContext('2d');
     let meshPoints = [];
